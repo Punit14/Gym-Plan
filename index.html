@@ -97,7 +97,7 @@
   .ex-name { font-weight:700; font-size:15px; }
   .copy-btn {
     background:rgba(var(--accent-rgb),0.15); border:none; border-radius:6px;
-    padding:3px 8px; cursor:pointer; font-size:11px; color:var(--accent);
+    padding:5px 6px; cursor:pointer; font-size:11px; color:var(--accent);
     font-weight:700; font-family:'DM Sans',sans-serif; flex-shrink:0;
     transition:background 0.2s, color 0.2s;
   }
@@ -351,7 +351,7 @@ function render() {
                 <div>
                   <div class="ex-name-row">
                     <div class="ex-name">${ex.name}</div>
-                    <button class="copy-btn" onclick="copyText(event, '${ex.name}')">Copy</button>
+                    <button class="copy-btn" onclick="copyText(event, '${ex.name}')" title="Copy"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
                   </div>
                   <div class="ex-meta">${ex.sets} &nbsp;·&nbsp; ${ex.reps}</div>
                 </div>
@@ -391,10 +391,10 @@ function copyText(e, text) {
   e.stopPropagation();
   const btn = e.currentTarget;
   navigator.clipboard.writeText(text).then(() => {
-    btn.textContent = '✓ Copied';
+    btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
     btn.classList.add('copied');
     setTimeout(() => {
-      btn.textContent = 'Copy';
+      btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
       btn.classList.remove('copied');
     }, 1500);
   });
