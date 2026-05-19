@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>Icon Generator – Punit's Gym Plan</title>
+<style>
+  body { background:#111; color:#fff; font-family:sans-serif; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; gap:20px; }
+  button { background:#FF6B35; color:#fff; border:none; padding:14px 28px; border-radius:12px; font-size:16px; font-weight:700; cursor:pointer; }
+  p { color:#aaa; font-size:14px; }
+</style>
+</head>
+<body>
+<h2>Icon Generator</h2>
+<p>Click the button — two icons will download automatically.</p>
+<button onclick="generateAll()">Download Icons</button>
+<canvas id="c" style="display:none"></canvas>
+
+<script>
+function drawIcon(size) {
+  const canvas = document.getElementById('c');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d');
+
+  // Dark background
+  ctx.fillStyle = '#080810';
+  ctx.fillRect(0, 0, size, size);
+
+  // Orange glow
+  const glow = ctx.createRadialGradient(size/2, size/2, 0, size/2, size/2, size*0.5);
+  glow.addColorStop(0, 'rgba(255,107,53,0.35)');
+  glow.addColorStop(1, 'transparent');
+  ctx.fillStyle = glow;
+  ctx.fillRect(0, 0, size, size);
+
+  // Orange circle
+  ctx.fillStyle = '#FF6B35';
+  ctx.beginPath();
+  ctx.arc(size/2, size/2, size * 0.36, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Letter P
+  ctx.fillStyle = '#ffffff';
+  ctx.font = `900 ${Math.round(size * 0.38)}px Arial, sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('P', size / 2, size / 2 + size * 0.03);
+
+  return canvas;
+}
+
+function download(canvas, filename) {
+  const a = document.createElement('a');
+  a.href = canvas.toDataURL('image/png');
+  a.download = filename;
+  a.click();
+}
+
+function generateAll() {
+  drawIcon(192);
+  download(document.getElementById('c'), 'icon-192.png');
+
+  setTimeout(() => {
+    drawIcon(512);
+    download(document.getElementById('c'), 'icon-512.png');
+  }, 500);
+
+  document.querySelector('p').textContent = '✅ Done! Move both downloaded files into the icons/ folder.';
+}
+</script>
+</body>
+</html>

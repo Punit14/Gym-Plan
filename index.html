@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Punit's Gym Plan</title>
+
+<!-- PWA -->
+<link rel="manifest" href="./manifest.json"/>
+<meta name="theme-color" content="#FF6B35"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Gym Plan"/>
+<link rel="apple-touch-icon" href="./icons/icon-192.png"/>
+
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700;900&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #080810;
+    --card: #10101e;
+    --border: rgba(255,255,255,0.08);
+    --text: #f0f0f8;
+    --muted: rgba(240,240,248,0.45);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #0d0d20 0%, #131330 60%, #0d1a3a 100%);
+    padding: 36px 20px 28px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content:''; position:absolute; top:-60px; right:-60px;
+    width:260px; height:260px;
+    background: radial-gradient(circle, rgba(255,107,53,0.18) 0%, transparent 70%);
+    border-radius:50%;
+  }
+  .header::after {
+    content:''; position:absolute; bottom:-40px; left:-40px;
+    width:200px; height:200px;
+    background: radial-gradient(circle, rgba(78,205,196,0.15) 0%, transparent 70%);
+    border-radius:50%;
+  }
+  .header-label { font-size:11px; letter-spacing:4px; color:#FF6B35; text-transform:uppercase; font-weight:700; margin-bottom:10px; }
+  .header h1 { font-family:'Bebas Neue', sans-serif; font-size:clamp(40px,8vw,64px); line-height:1; letter-spacing:2px; }
+  .header h1 span { color:#FF6B35; }
+  .header p { color:var(--muted); font-size:14px; margin-top:10px; }
+
+  /* DAY TABS */
+  .tabs { display:flex; overflow-x:auto; gap:8px; padding:16px; scrollbar-width:none; border-bottom:1px solid var(--border); }
+  .tabs::-webkit-scrollbar { display:none; }
+  .tab {
+    flex-shrink:0; padding:10px 14px; border-radius:14px; border:2px solid var(--border);
+    background:rgba(255,255,255,0.04); color:var(--muted); cursor:pointer;
+    font-family:'DM Sans',sans-serif; font-weight:700; font-size:13px;
+    text-align:center; min-width:72px; transition:all 0.2s;
+  }
+  .tab.active { color:var(--accent); border-color:var(--accent); background:rgba(var(--accent-rgb),0.12); }
+  .tab-icon { font-size:20px; display:block; margin-bottom:3px; }
+
+  /* DAY HERO */
+  .day-hero {
+    margin:18px 16px 0;
+    border-radius:18px;
+    padding:20px;
+    border:1px solid rgba(var(--accent-rgb),0.3);
+    background:linear-gradient(135deg, rgba(var(--accent-rgb),0.15) 0%, rgba(var(--accent-rgb),0.05) 100%);
+    display:flex; justify-content:space-between; align-items:flex-start;
+  }
+  .day-tag { font-size:11px; color:var(--accent); font-weight:700; letter-spacing:3px; text-transform:uppercase; margin-bottom:6px; }
+  .day-title { font-family:'Bebas Neue',sans-serif; font-size:30px; letter-spacing:1px; }
+  .day-focus { color:var(--muted); font-size:14px; margin-top:3px; }
+  .day-badge { background:var(--accent); color:#fff; border-radius:10px; padding:6px 12px; font-size:12px; font-weight:700; white-space:nowrap; }
+
+  /* EXERCISE CARDS */
+  .exercises { padding:12px 16px; display:flex; flex-direction:column; gap:10px; }
+  .ex-card {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:16px; overflow:hidden; cursor:pointer;
+    transition:border-color 0.2s, background 0.2s;
+  }
+  .ex-card.open { border-color:rgba(var(--accent-rgb),0.5); background:rgba(255,255,255,0.06); }
+  .ex-header { padding:14px 16px; display:flex; align-items:center; justify-content:space-between; }
+  .ex-left { display:flex; align-items:center; gap:12px; }
+  .ex-num {
+    width:34px; height:34px; border-radius:9px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:900; font-size:13px;
+    background:rgba(var(--accent-rgb),0.18); color:var(--accent);
+  }
+  .ex-name { font-weight:700; font-size:15px; }
+  .ex-meta { color:var(--muted); font-size:12px; margin-top:2px; }
+  .ex-chevron { color:var(--accent); font-size:18px; transition:transform 0.25s; }
+  .ex-card.open .ex-chevron { transform:rotate(180deg); }
+
+  /* EXPANDED CONTENT */
+  .ex-body { display:none; padding:0 16px 16px; }
+  .ex-card.open .ex-body { display:block; }
+  .ex-divider { height:1px; background:rgba(var(--accent-rgb),0.2); margin-bottom:14px; }
+
+  .machine-block { border-radius:12px; overflow:hidden; margin-bottom:10px; }
+  .machine-label {
+    background:rgba(var(--accent-rgb),0.15); border-radius:12px;
+    padding:10px 14px;
+  }
+  .machine-label-tag { font-size:10px; color:var(--accent); font-weight:700; letter-spacing:3px; text-transform:uppercase; margin-bottom:3px; }
+  .machine-label-name { font-size:14px; font-weight:700; }
+
+  .tip-block {
+    background:rgba(var(--accent-rgb),0.1);
+    border-left:3px solid var(--accent);
+    border-radius:0 10px 10px 0;
+    padding:10px 14px;
+  }
+  .tip-tag { font-size:10px; color:var(--accent); font-weight:700; letter-spacing:3px; text-transform:uppercase; margin-bottom:4px; }
+  .tip-text { font-size:13px; color:rgba(240,240,248,0.75); line-height:1.6; }
+
+  /* TIPS SECTION */
+  .tips-section { padding:8px 16px 24px; }
+  .tips-box { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:18px; }
+  .tips-title { font-size:11px; color:#FF6B35; font-weight:700; letter-spacing:3px; text-transform:uppercase; margin-bottom:14px; }
+  .tip-item { font-size:13px; color:var(--muted); padding:8px 12px; background:rgba(255,255,255,0.04); border-radius:8px; margin-bottom:6px; line-height:1.5; }
+
+  .footer { text-align:center; padding:12px 16px; color:rgba(255,255,255,0.18); font-size:11px; }
+
+  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+  .day-content { animation: fadeIn 0.3s ease; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-label">Punit's Program</div>
+  <h1>7-Day Full Body<br/><span>Gym Plan</span></h1>
+  <p>60 min/day &nbsp;·&nbsp; Machine-based &nbsp;·&nbsp; Beginner friendly</p>
+</div>
+
+<div class="tabs" id="tabs"></div>
+<div id="content"></div>
+
+<script>
+const days = [
+  {
+    day:"Monday", icon:"💪", tag:"Push Day", focus:"Chest & Triceps", accent:"#FF6B35", accentRgb:"255,107,53",
+    exercises:[
+      { name:"Warm-up", sets:"5 min", reps:"Treadmill / Bike",
+        machine:"Treadmill or Stationary Bike",
+        tip:"Light pace – just get blood flowing before lifting." },
+      { name:"Chest Press", sets:"3 sets", reps:"10–12 reps",
+        machine:"Chest Press Machine (Seated)",
+        tip:"Keep back flat, push straight out, don't lock elbows at the top." },
+      { name:"Pec Deck Fly", sets:"3 sets", reps:"10–12 reps",
+        machine:"Pec Deck / Chest Fly Machine",
+        tip:"Slow and controlled – feel the chest stretch on the way out." },
+      { name:"Cable Crossover", sets:"2 sets", reps:"12–15 reps",
+        machine:"Cable Machine (high pulley)",
+        tip:"Keep a slight bend in elbows throughout. Great for inner chest." },
+      { name:"Tricep Pushdown", sets:"3 sets", reps:"12–15 reps",
+        machine:"Cable Machine with Rope Attachment",
+        tip:"Elbows stay tucked to your sides. Fully extend at the bottom." },
+      { name:"Overhead Tricep Extension", sets:"2 sets", reps:"12 reps",
+        machine:"Cable Machine (rope overhead)",
+        tip:"Extend fully overhead and squeeze. Keep core tight." },
+    ]
+  },
+  {
+    day:"Tuesday", icon:"🏋️", tag:"Pull Day", focus:"Back & Biceps", accent:"#4ECDC4", accentRgb:"78,205,196",
+    exercises:[
+      { name:"Warm-up", sets:"5 min", reps:"Rowing Machine",
+        machine:"Rowing Machine",
+        tip:"Engages back and arms together – perfect pre-workout warm-up." },
+      { name:"Lat Pulldown", sets:"3 sets", reps:"10–12 reps",
+        machine:"Lat Pulldown Machine",
+        tip:"Pull bar to upper chest, lean back slightly, squeeze shoulder blades." },
+      { name:"Seated Cable Row", sets:"3 sets", reps:"10–12 reps",
+        machine:"Seated Row Machine",
+        tip:"Pull to your belly button. Keep chest up and back straight." },
+      { name:"Assisted Pull-Up", sets:"3 sets", reps:"8–10 reps",
+        machine:"Assisted Pull-Up / Dip Machine",
+        tip:"Machine reduces your bodyweight – great for beginners to build strength." },
+      { name:"Bicep Curl", sets:"3 sets", reps:"12 reps",
+        machine:"Dumbbell Rack or Cable Machine",
+        tip:"Don't swing – isolate the bicep. Slow on the way down." },
+      { name:"Hammer Curl", sets:"2 sets", reps:"12 reps",
+        machine:"Dumbbell Rack",
+        tip:"Neutral grip (thumbs up). Works the brachialis for thicker arms." },
+    ]
+  },
+  {
+    day:"Wednesday", icon:"🦵", tag:"Leg Day", focus:"Legs & Glutes", accent:"#A855F7", accentRgb:"168,85,247",
+    exercises:[
+      { name:"Warm-up", sets:"5 min", reps:"Stationary Bike",
+        machine:"Stationary Bike",
+        tip:"Loosens up hip flexors and quads before heavy leg work." },
+      { name:"Leg Press", sets:"3 sets", reps:"10–12 reps",
+        machine:"Leg Press Machine",
+        tip:"Feet shoulder-width. Don't lock your knees at the top." },
+      { name:"Leg Extension", sets:"3 sets", reps:"12–15 reps",
+        machine:"Leg Extension Machine",
+        tip:"Squeeze at the top for 1 second. Slow on the way down." },
+      { name:"Leg Curl", sets:"3 sets", reps:"12–15 reps",
+        machine:"Lying or Seated Leg Curl Machine",
+        tip:"Curl fully and lower slowly – really focus on the hamstrings." },
+      { name:"Hip Abduction", sets:"3 sets", reps:"15 reps",
+        machine:"Hip Abduction Machine (Outer Thigh)",
+        tip:"Works glutes and outer thighs. Often overlooked but very effective!" },
+      { name:"Calf Raise", sets:"3 sets", reps:"15–20 reps",
+        machine:"Calf Raise Machine",
+        tip:"Full range of motion – all the way up and all the way down." },
+    ]
+  },
+  {
+    day:"Thursday", icon:"🎯", tag:"Shoulder Day", focus:"Shoulders & Core", accent:"#F59E0B", accentRgb:"245,158,11",
+    exercises:[
+      { name:"Warm-up", sets:"5 min", reps:"Elliptical",
+        machine:"Elliptical Trainer",
+        tip:"Arm-movement elliptical warms up shoulders and gets heart rate up." },
+      { name:"Shoulder Press", sets:"3 sets", reps:"10–12 reps",
+        machine:"Shoulder Press Machine (Seated)",
+        tip:"Press straight overhead. Don't arch your lower back." },
+      { name:"Lateral Raise", sets:"3 sets", reps:"12–15 reps",
+        machine:"Cable Machine or Dumbbells",
+        tip:"Raise to shoulder height only. Slight forward lean for better form." },
+      { name:"Front Raise", sets:"2 sets", reps:"12 reps",
+        machine:"Cable Machine (low pulley) or Dumbbells",
+        tip:"Controlled lift to eye level. Targets the front deltoids." },
+      { name:"Plank Hold", sets:"3 sets", reps:"20–30 sec",
+        machine:"Mat / Floor Area",
+        tip:"Keep hips level, body in a straight line. Breathe steadily." },
+      { name:"Cable Crunch", sets:"3 sets", reps:"15 reps",
+        machine:"Cable Machine with Rope Attachment",
+        tip:"Kneel and pull rope to knees. Crunch hard and hold 1 second." },
+    ]
+  },
+  {
+    day:"Friday", icon:"🔥", tag:"Compound Day", focus:"Full Body Strength", accent:"#EF4444", accentRgb:"239,68,68",
+    exercises:[
+      { name:"Warm-up", sets:"5 min", reps:"Incline Treadmill Walk",
+        machine:"Treadmill (incline)",
+        tip:"Incline walking activates glutes and calves before compounds." },
+      { name:"Smith Machine Squat", sets:"3 sets", reps:"10 reps",
+        machine:"Smith Machine",
+        tip:"Bar guided = safer for beginners. Feet shoulder-width, squat to parallel." },
+      { name:"Smith Machine RDL", sets:"3 sets", reps:"8–10 reps",
+        machine:"Smith Machine",
+        tip:"Hinge at hips, keep back flat. This is NOT a squat – push hips back." },
+      { name:"Chest Press Machine", sets:"3 sets", reps:"10–12 reps",
+        machine:"Chest Press Machine",
+        tip:"Upper body push to complement the lower body work today." },
+      { name:"Lat Pulldown", sets:"3 sets", reps:"10–12 reps",
+        machine:"Lat Pulldown Machine",
+        tip:"Full body wrap-up with a strong pulling movement. Squeeze the lats." },
+      { name:"Leg Press (Burnout)", sets:"2 sets", reps:"15–20 reps (light)",
+        machine:"Leg Press Machine",
+        tip:"Lighter weight, higher reps to finish off the legs for the week." },
+    ]
+  },
+  {
+    day:"Saturday", icon:"🚴", tag:"Active Recovery", focus:"Cardio & Core", accent:"#10B981", accentRgb:"16,185,129",
+    exercises:[
+      { name:"Interval Run/Walk", sets:"20 min", reps:"1 min jog / 1 min walk",
+        machine:"Treadmill",
+        tip:"Alternate pace x10. Great fat-burning and cardio endurance builder." },
+      { name:"Elliptical", sets:"10 min", reps:"Steady pace",
+        machine:"Elliptical Trainer",
+        tip:"Low impact on joints. Great after a heavy lifting week." },
+      { name:"Ab Crunch Machine", sets:"3 sets", reps:"15 reps",
+        machine:"Abdominal Crunch Machine",
+        tip:"Controlled crunches. Don't jerk the weight – use your abs." },
+      { name:"Hanging Knee Raise", sets:"3 sets", reps:"12 reps",
+        machine:"Captain's Chair / Pull-up Station",
+        tip:"Bring knees to chest slowly. Lower back safety is key here." },
+      { name:"Cool-down Row", sets:"5 min", reps:"Easy pace",
+        machine:"Rowing Machine",
+        tip:"Perfect full-body cool down. Go very easy and focus on breathing." },
+    ]
+  },
+  {
+    day:"Sunday", icon:"😴", tag:"Rest Day", focus:"Rest & Recovery", accent:"#6B7280", accentRgb:"107,114,128",
+    exercises:[
+      { name:"Light Walk", sets:"20–30 min", reps:"Optional",
+        machine:"Outdoors or Treadmill (slow)",
+        tip:"A gentle walk reduces soreness and aids muscle recovery." },
+      { name:"Full Body Stretch", sets:"10–15 min", reps:"Hold 30 sec each",
+        machine:"Yoga Mat / Stretching Area",
+        tip:"Stretch quads, hamstrings, chest, back, shoulders – every muscle group." },
+      { name:"Foam Rolling", sets:"10 min", reps:"As needed",
+        machine:"Foam Roller (gym floor area)",
+        tip:"Roll quads, hamstrings, calves, upper back to reduce tightness." },
+    ]
+  },
+];
+
+const tips = [
+  "🥤 Drink water between every single set",
+  "😴 Sleep 7–8 hours – muscles grow during rest, not during workouts",
+  "🍗 Eat protein within 30 minutes after your workout",
+  "📈 Increase weight only when 12 reps feel easy",
+  "⏱️ Rest 60–90 seconds between sets (beginners need more recovery)",
+  "📝 Write down your weights each session – tracking = progress",
+  "🙋 Ask gym staff to show you any machine before your first use",
+];
+
+let activeDay = 0;
+let openEx = null;
+
+function render() {
+  const day = days[activeDay];
+  document.documentElement.style.setProperty('--accent', day.accent);
+  document.documentElement.style.setProperty('--accent-rgb', day.accentRgb);
+
+  const tabsEl = document.getElementById('tabs');
+  tabsEl.innerHTML = days.map((d, i) => `
+    <button class="tab ${i === activeDay ? 'active' : ''}" style="${i===activeDay?`--accent:${d.accent};color:${d.accent};border-color:${d.accent};background:rgba(${d.accentRgb},0.12)`:''}" onclick="switchDay(${i})">
+      <span class="tab-icon">${d.icon}</span>
+      ${d.day.slice(0,3)}
+    </button>
+  `).join('');
+
+  document.getElementById('content').innerHTML = `
+    <div class="day-content">
+      <div class="day-hero">
+        <div>
+          <div class="day-tag">${day.tag}</div>
+          <div class="day-title">${day.icon} ${day.day}</div>
+          <div class="day-focus">${day.focus}</div>
+        </div>
+        <div class="day-badge">${day.exercises.length} exercises</div>
+      </div>
+
+      <div class="exercises">
+        ${day.exercises.map((ex, i) => `
+          <div class="ex-card ${openEx === i ? 'open' : ''}" onclick="toggleEx(${i})">
+            <div class="ex-header">
+              <div class="ex-left">
+                <div class="ex-num">${i === 0 ? '🔥' : i+1}</div>
+                <div>
+                  <div class="ex-name">${ex.name}</div>
+                  <div class="ex-meta">${ex.sets} &nbsp;·&nbsp; ${ex.reps}</div>
+                </div>
+              </div>
+              <div class="ex-chevron">▾</div>
+            </div>
+            <div class="ex-body">
+              <div class="ex-divider"></div>
+              <div class="machine-block">
+                <div class="machine-label">
+                  <div class="machine-label-tag">💪 Machine / Equipment</div>
+                  <div class="machine-label-name">${ex.machine}</div>
+                </div>
+              </div>
+              <div class="tip-block">
+                <div class="tip-tag">💡 Beginner Tip</div>
+                <div class="tip-text">${ex.tip}</div>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+
+      <div class="tips-section">
+        <div class="tips-box">
+          <div class="tips-title">General Tips for Beginners</div>
+          ${tips.map(t => `<div class="tip-item">${t}</div>`).join('')}
+        </div>
+      </div>
+
+      <div class="footer">Tap any exercise to see the machine &amp; tips</div>
+    </div>
+  `;
+}
+
+function switchDay(i) {
+  activeDay = i;
+  openEx = null;
+  render();
+}
+
+function toggleEx(i) {
+  openEx = (openEx === i) ? null : i;
+  render();
+}
+
+render();
+
+// Register service worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
