@@ -137,6 +137,19 @@
 
   .footer { text-align:center; padding:12px 16px; color:rgba(255,255,255,0.18); font-size:11px; }
 
+  /* STRETCH SECTION */
+  .stretch-section-header {
+    margin: 4px 16px 0;
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: rgba(120,80,220,0.1);
+    border: 1px solid rgba(120,80,220,0.25);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .stretch-header-tag { font-size:11px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:#a78bfa; }
+  .stretch-header-sub { font-size:12px; color:var(--muted); }
+  .stretch-card .ex-num { background:rgba(120,80,220,0.18); color:#a78bfa; font-size:16px; }
+
   @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
   .day-content { animation: fadeIn 0.3s ease; }
 </style>
@@ -175,6 +188,17 @@ const days = [
       { name:"Overhead Tricep Extension", sets:"2 sets", reps:"12 reps",
         machine:"Cable Machine (rope overhead)",
         tip:"Extend fully overhead and squeeze. Keep core tight." },
+    ],
+    stretches:[
+      { name:"Doorway Chest Stretch", sets:"2 × 30 sec", reps:"each side",
+        machine:"Doorway or wall edge",
+        tip:"Place forearm on the doorframe at 90°, gently lean forward until you feel the pec stretch. Don't force — breathe into it." },
+      { name:"Overhead Tricep Stretch", sets:"2 × 30 sec", reps:"each side",
+        machine:"Standing, bodyweight only",
+        tip:"Raise one arm, bend elbow behind head, use opposite hand to gently press the elbow back. Keep your chin level." },
+      { name:"Shoulder Pendulum Stretch", sets:"1 min", reps:"each arm",
+        machine:"Near a bench or waist-high surface",
+        tip:"Lean forward with one hand on bench, let the other arm hang freely and make small gentle circles. Decompresses the shoulder joint after pressing." },
     ]
   },
   {
@@ -198,6 +222,17 @@ const days = [
       { name:"Hammer Curl", sets:"2 sets", reps:"12 reps",
         machine:"Dumbbell Rack",
         tip:"Neutral grip (thumbs up). Works the brachialis for thicker arms." },
+    ],
+    stretches:[
+      { name:"Child's Pose", sets:"2 × 45 sec", reps:"hold",
+        machine:"Yoga Mat / Stretching Area",
+        tip:"Kneel and reach both arms forward, press chest toward the floor. Deeply stretches the lats and lower back worked during pulldowns and rows." },
+      { name:"Cat-Cow Stretch", sets:"10 slow reps", reps:"continuous flow",
+        machine:"Yoga Mat / Stretching Area",
+        tip:"On all fours, alternate arching (cow) and rounding (cat) your spine. Mobilises the entire back after a heavy pulling session." },
+      { name:"Doorway Bicep Stretch", sets:"2 × 30 sec", reps:"each side",
+        machine:"Doorway or wall",
+        tip:"Extend arm at shoulder height on the wall with thumb pointing down, gently rotate your body away. You'll feel it from bicep to forearm." },
     ]
   },
   {
@@ -221,6 +256,20 @@ const days = [
       { name:"Calf Raise", sets:"3 sets", reps:"15–20 reps",
         machine:"Calf Raise Machine",
         tip:"Full range of motion – all the way up and all the way down." },
+    ],
+    stretches:[
+      { name:"Standing Quad Stretch", sets:"2 × 30 sec", reps:"each leg",
+        machine:"Wall or machine for balance",
+        tip:"Stand on one leg, pull the other foot to your glute. Keep knees together and stand tall. Targets the quads and hip flexors from leg press and extensions." },
+      { name:"Seated Hamstring Stretch", sets:"2 × 30 sec", reps:"each leg",
+        machine:"Bench or Yoga Mat",
+        tip:"Sit at the edge of a bench, extend one leg out, hinge forward from the hips (not the lower back). You'll feel it all the way behind the knee." },
+      { name:"Pigeon Pose (Glute Stretch)", sets:"2 × 30 sec", reps:"each side",
+        machine:"Yoga Mat",
+        tip:"From a lunge, bring the front shin across your body and lower down. Targets the glutes and hip rotators fatigued by hip abduction and leg press." },
+      { name:"Kneeling Hip Flexor Stretch", sets:"2 × 30 sec", reps:"each side",
+        machine:"Yoga Mat",
+        tip:"Lunge with the back knee on the mat, push hips forward and hold. Releases the hip flexors compressed during seated leg work." },
     ]
   },
   {
@@ -244,6 +293,17 @@ const days = [
       { name:"Cable Crunch", sets:"3 sets", reps:"15 reps",
         machine:"Cable Machine with Rope Attachment",
         tip:"Kneel and pull rope to knees. Crunch hard and hold 1 second." },
+    ],
+    stretches:[
+      { name:"Cross-Body Shoulder Stretch", sets:"2 × 30 sec", reps:"each side",
+        machine:"Standing, bodyweight only",
+        tip:"Pull one arm straight across your chest with the other hand. Don't rotate your torso — only the arm moves. Targets the rear deltoid and rotator cuff." },
+      { name:"Doorway Shoulder Opener", sets:"2 × 30 sec", reps:"hold",
+        machine:"Doorway",
+        tip:"Place forearms on the doorframe at 90°, step gently forward. Opens the front deltoids and chest at the same time after a pressing session." },
+      { name:"Seated Spinal Twist", sets:"2 × 30 sec", reps:"each side",
+        machine:"Yoga Mat or bench",
+        tip:"Sit tall, cross one leg over, rotate your torso toward it and hold. Releases the obliques and lower back engaged during planks and crunches." },
     ]
   },
   {
@@ -267,6 +327,17 @@ const days = [
       { name:"Leg Press (Burnout)", sets:"2 sets", reps:"15–20 reps (light)",
         machine:"Leg Press Machine",
         tip:"Lighter weight, higher reps to finish off the legs for the week." },
+    ],
+    stretches:[
+      { name:"Kneeling Hip Flexor Stretch", sets:"2 × 30 sec", reps:"each side",
+        machine:"Yoga Mat",
+        tip:"Essential after squats and RDLs. Lunge with back knee on mat, push hips forward and hold. Your hip flexors will thank you." },
+      { name:"Lat Side Stretch", sets:"2 × 30 sec", reps:"each side",
+        machine:"Standing, bodyweight only",
+        tip:"Raise one arm overhead, lean to the opposite side and hold. Stretches the lats worked during pulldowns and relieves spinal compression." },
+      { name:"Standing Chest & Rear Shoulder Stretch", sets:"2 × 30 sec", reps:"hold",
+        machine:"Standing, bodyweight only",
+        tip:"Clasp hands behind your back, straighten arms and gently lift. Opens the entire front of the body after a full compound pressing session." },
     ]
   },
   {
@@ -287,6 +358,17 @@ const days = [
       { name:"Cool-down Row", sets:"5 min", reps:"Easy pace",
         machine:"Rowing Machine",
         tip:"Perfect full-body cool down. Go very easy and focus on breathing." },
+    ],
+    stretches:[
+      { name:"Cobra Stretch", sets:"2 × 30 sec", reps:"hold",
+        machine:"Yoga Mat",
+        tip:"Lie face down, press up through your hands and gently arch. Opens the hip flexors and core used in cardio and crunches." },
+      { name:"Lying Knee-to-Chest", sets:"2 × 30 sec", reps:"each leg",
+        machine:"Yoga Mat",
+        tip:"Lie on your back, pull one knee to chest and hold. Releases lower back tightness built up from ab work and cardio." },
+      { name:"Seated Forward Fold", sets:"2 × 30 sec", reps:"hold",
+        machine:"Yoga Mat",
+        tip:"Sit with legs extended, hinge forward from the hips and reach toward your feet. Elongates the entire posterior chain — the perfect end to a recovery day." },
     ]
   },
   {
@@ -301,6 +383,20 @@ const days = [
       { name:"Foam Rolling", sets:"10 min", reps:"As needed",
         machine:"Foam Roller (gym floor area)",
         tip:"Roll quads, hamstrings, calves, upper back to reduce tightness." },
+    ],
+    stretches:[
+      { name:"Supine Hamstring Stretch", sets:"2 × 30 sec", reps:"each leg",
+        machine:"Yoga Mat",
+        tip:"Lie on your back, lift one leg with hands behind the thigh and gently straighten. Gentle and gravity-assisted — perfect for a rest day." },
+      { name:"Figure-Four Hip Stretch", sets:"2 × 30 sec", reps:"each side",
+        machine:"Yoga Mat",
+        tip:"Lie on back, cross one ankle over the opposite knee and pull both toward your chest. Deep glute and piriformis release after a full week of training." },
+      { name:"Thread-the-Needle Shoulder Stretch", sets:"2 × 30 sec", reps:"each side",
+        machine:"Yoga Mat",
+        tip:"On all fours, slide one arm under your body and lower shoulder to floor. Excellent rotator cuff recovery stretch." },
+      { name:"Butterfly Groin Stretch", sets:"2 × 30 sec", reps:"hold",
+        machine:"Yoga Mat",
+        tip:"Sit with soles of feet together, gently press knees toward the floor. Opens inner thighs and hips that get compressed all week." },
     ]
   },
 ];
@@ -317,6 +413,7 @@ const tips = [
 
 let activeDay = 0;
 let openEx = null;
+let openStretch = null;
 
 function render() {
   const day = days[activeDay];
@@ -375,6 +472,48 @@ function render() {
         `).join('')}
       </div>
 
+      ${day.stretches && day.stretches.length > 0 ? `
+      <div class="stretch-section-header">
+        <div>
+          <div class="stretch-header-tag">🧘 Post-Workout Stretching</div>
+          <div class="stretch-header-sub">Hold each stretch · release tension · improve flexibility</div>
+        </div>
+        <div class="day-badge" style="background:rgba(120,80,220,0.25);color:#a78bfa;">${day.stretches.length} stretches</div>
+      </div>
+      <div class="exercises">
+        ${day.stretches.map((str, i) => `
+          <div class="ex-card stretch-card ${openStretch === i ? 'open' : ''}" onclick="toggleStretch(${i})">
+            <div class="ex-header">
+              <div class="ex-left">
+                <div class="ex-num" style="background:rgba(120,80,220,0.18);color:#a78bfa;font-size:16px;">🧘</div>
+                <div>
+                  <div class="ex-name-row">
+                    <div class="ex-name">${str.name}</div>
+                    <button class="copy-btn" style="color:#a78bfa;background:rgba(120,80,220,0.15);" onclick="copyText(event, '${str.name}')" title="Copy"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+                  </div>
+                  <div class="ex-meta">${str.sets} &nbsp;·&nbsp; ${str.reps}</div>
+                </div>
+              </div>
+              <div class="ex-chevron" style="color:#a78bfa;">▾</div>
+            </div>
+            <div class="ex-body">
+              <div class="ex-divider" style="background:rgba(120,80,220,0.2);"></div>
+              <div class="machine-block">
+                <div class="machine-label" style="background:rgba(120,80,220,0.12);">
+                  <div class="machine-label-tag" style="color:#a78bfa;">📍 Location / Equipment</div>
+                  <div class="machine-label-name">${str.machine}</div>
+                </div>
+              </div>
+              <div class="tip-block" style="background:rgba(120,80,220,0.08);border-left-color:#a78bfa;">
+                <div class="tip-tag" style="color:#a78bfa;">💡 How to stretch</div>
+                <div class="tip-text">${str.tip}</div>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+      ` : ''}
+
       <div class="tips-section">
         <div class="tips-box">
           <div class="tips-title">General Tips for Beginners</div>
@@ -403,11 +542,17 @@ function copyText(e, text) {
 function switchDay(i) {
   activeDay = i;
   openEx = null;
+  openStretch = null;
   render();
 }
 
 function toggleEx(i) {
   openEx = (openEx === i) ? null : i;
+  render();
+}
+
+function toggleStretch(i) {
+  openStretch = (openStretch === i) ? null : i;
   render();
 }
 
