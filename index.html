@@ -659,7 +659,11 @@ let lightboxIndex = 0;
 let lbTouchX = 0;
 
 const MEDIA_MAX = 6;
-const mediaCache = {}; // slug → found[] once probed; undefined = not yet checked
+// Persist probe results across page refreshes — zero network cost on repeat visits.
+const mediaCache = (() => {
+  try { return JSON.parse(sessionStorage.getItem('gymMediaCache') || '{}'); }
+  catch { return {}; }
+})();
 
 function nameToSlug(name) {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -675,26 +679,31 @@ function renderMediaStrip(exName) {
   return `<div class="media-strip" id="${id}" style="display:none;margin:0;"></div>`;
 }
 
-// Parallel HEAD requests — no body transferred, works on GitHub Pages.
+// Probes number-by-number (3 parallel per number), stops at the first empty batch.
+// Worst case: MEDIA_MAX × 3 requests. Typical (no media): just 3 requests.
 async function probeMedia(slug, id) {
-  const candidates = [];
+  const found = [];
+  const chk = src => fetch(src, { method: 'HEAD' }).then(r => r.ok ? src : null).catch(() => null);
+
   for (let i = 1; i <= MEDIA_MAX; i++) {
-    candidates.push({ type: 'image', src: `media/${slug}-${i}.jpg` });
-    candidates.push({ type: 'video', src: `media/${slug}-${i}.mp4` });
-    candidates.push({ type: 'video', src: `media/${slug}-${i}.mov` });
+    const [jpg, mp4, mov] = await Promise.all([
+      chk(`media/${slug}-${i}.jpg`),
+      chk(`media/${slug}-${i}.mp4`),
+      chk(`media/${slug}-${i}.mov`),
+    ]);
+    if (!jpg && !mp4 && !mov) break; // no file at this number — stop
+    if (jpg) found.push({ type: 'image', src: jpg });
+    if (mp4) found.push({ type: 'video', src: mp4 });
+    if (mov) found.push({ type: 'video', src: mov });
   }
-  const results = await Promise.all(
-    candidates.map(c =>
-      fetch(c.src, { method: 'HEAD' }).then(r => r.ok ? c : null).catch(() => null)
-    )
-  );
-  const found = results.filter(Boolean);
+
   mediaCache[slug] = found;
+  try { sessionStorage.setItem('gymMediaCache', JSON.stringify(mediaCache)); } catch {}
 
   const strip = document.getElementById(id);
-  if (!strip) return; // card was closed before probe finished
+  if (!strip) return;
   if (!found.length) { strip.remove(); return; }
-  strip.removeAttribute('style'); // let CSS take over (margin-top etc.)
+  strip.removeAttribute('style');
   strip.innerHTML = thumbsHTML(found);
 }
 
@@ -818,7 +827,7 @@ function render() {
 
       <div class="exercises">
         ${day.exercises.map((ex, i) => `
-          <div class="ex-card ${openEx === i ? 'open' : ''}" onclick="toggleEx(${i})">
+          <div class="ex-card ${openEx === i ? 'open' : ''}" id="ex-${i}" onclick="toggleEx(${i})">
             <div class="ex-header">
               <div class="ex-left">
                 <div class="ex-num">${i === 0 ? '🔥' : i+1}</div>
@@ -862,7 +871,7 @@ function render() {
       </div>
       <div class="exercises">
         ${day.stretches.map((str, i) => `
-          <div class="ex-card stretch-card ${openStretch === i ? 'open' : ''}" onclick="toggleStretch(${i})" style="${openStretch===i?'border-color:rgba(120,80,220,0.5);':''}">
+          <div class="ex-card stretch-card ${openStretch === i ? 'open' : ''}" id="str-${i}" onclick="toggleStretch(${i})" style="${openStretch===i?'border-color:rgba(120,80,220,0.5);':''}">
             <div class="ex-header">
               <div class="ex-left">
                 <div class="ex-num" style="background:rgba(120,80,220,0.18);color:#a78bfa;font-size:16px;">🧘</div>
@@ -930,13 +939,15 @@ function switchDay(i) {
 }
 
 function toggleEx(i) {
+  document.getElementById('ex-' + openEx)?.classList.remove('open');
   openEx = (openEx === i) ? null : i;
-  render();
+  document.getElementById('ex-' + openEx)?.classList.add('open');
 }
 
 function toggleStretch(i) {
+  document.getElementById('str-' + openStretch)?.classList.remove('open');
   openStretch = (openStretch === i) ? null : i;
-  render();
+  document.getElementById('str-' + openStretch)?.classList.add('open');
 }
 
 // ── Lightbox touch/keyboard ────────────────────────────────────────
