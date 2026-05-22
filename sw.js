@@ -1,4 +1,4 @@
-const CACHE_NAME = 'punits-gym-plan-v1';
+const CACHE_NAME = 'punits-gym-plan-v3';
 const urlsToCache = [
   './',
   './index.html',

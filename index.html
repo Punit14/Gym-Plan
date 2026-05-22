@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <title>Punit's Gym Plan</title>
 
 <!-- PWA -->
@@ -21,14 +21,26 @@
     --border: rgba(255,255,255,0.08);
     --text: #f0f0f8;
     --muted: rgba(240,240,248,0.45);
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html { height: -webkit-fill-available; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    overscroll-behavior-y: none;
+  }
 
   /* HEADER */
   .header {
     background: linear-gradient(135deg, #0d0d20 0%, #131330 60%, #0d1a3a 100%);
-    padding: 36px 20px 28px;
+    padding: max(40px, calc(var(--safe-top) + 22px)) 20px 28px;
     text-align: center;
     border-bottom: 1px solid var(--border);
     position: relative;
@@ -51,14 +63,27 @@
   .header h1 span { color:#FF6B35; }
   .header p { color:var(--muted); font-size:14px; margin-top:10px; }
 
-  /* DAY TABS */
-  .tabs { display:flex; overflow-x:auto; gap:8px; padding:16px; scrollbar-width:none; border-bottom:1px solid var(--border); }
+  /* DAY TABS — sticky with glass blur */
+  .tabs {
+    display:flex; overflow-x:auto; gap:8px;
+    padding:14px 16px;
+    scrollbar-width:none;
+    border-bottom:1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(8,8,16,0.82);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+  }
   .tabs::-webkit-scrollbar { display:none; }
   .tab {
     flex-shrink:0; padding:10px 14px; border-radius:14px; border:2px solid var(--border);
     background:rgba(255,255,255,0.04); color:var(--muted); cursor:pointer;
     font-family:'DM Sans',sans-serif; font-weight:700; font-size:13px;
-    text-align:center; min-width:72px; transition:all 0.2s;
+    text-align:center; min-width:72px; min-height:62px;
+    transition:all 0.2s;
+    -webkit-user-select:none; user-select:none;
   }
   .tab.active { color:var(--accent); border-color:var(--accent); background:rgba(var(--accent-rgb),0.12); }
   .tab-icon { font-size:20px; display:block; margin-bottom:3px; }
@@ -83,28 +108,30 @@
     background:var(--card); border:1px solid var(--border);
     border-radius:16px; overflow:hidden; cursor:pointer;
     transition:border-color 0.2s, background 0.2s;
+    -webkit-user-select:none; user-select:none;
   }
   .ex-card.open { border-color:rgba(var(--accent-rgb),0.5); background:rgba(255,255,255,0.06); }
-  .ex-header { padding:14px 16px; display:flex; align-items:center; justify-content:space-between; }
-  .ex-left { display:flex; align-items:center; gap:12px; }
+  .ex-header { padding:16px 16px; display:flex; align-items:center; justify-content:space-between; min-height:66px; }
+  .ex-left { display:flex; align-items:center; gap:12px; flex:1; min-width:0; }
   .ex-num {
-    width:34px; height:34px; border-radius:9px; flex-shrink:0;
+    width:36px; height:36px; border-radius:10px; flex-shrink:0;
     display:flex; align-items:center; justify-content:center;
     font-weight:900; font-size:13px;
     background:rgba(var(--accent-rgb),0.18); color:var(--accent);
   }
-  .ex-name-row { display:flex; align-items:center; gap:8px; }
-  .ex-name { font-weight:700; font-size:15px; }
+  .ex-name-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .ex-name { font-weight:700; font-size:16px; line-height:1.3; }
   .copy-btn {
-    background:rgba(var(--accent-rgb),0.15); border:none; border-radius:6px;
-    padding:5px 6px; cursor:pointer; font-size:11px; color:var(--accent);
-    font-weight:700; font-family:'DM Sans',sans-serif; flex-shrink:0;
+    background:rgba(var(--accent-rgb),0.15); border:none; border-radius:7px;
+    padding:7px 8px; cursor:pointer; color:var(--accent);
+    font-family:'DM Sans',sans-serif; flex-shrink:0;
     transition:background 0.2s, color 0.2s;
+    min-width:34px; min-height:34px; display:flex; align-items:center; justify-content:center;
   }
-  .copy-btn:hover { background:rgba(var(--accent-rgb),0.3); }
+  .copy-btn:active { background:rgba(var(--accent-rgb),0.3); }
   .copy-btn.copied { color:#4ECDC4; background:rgba(78,205,196,0.15); }
-  .ex-meta { color:var(--muted); font-size:12px; margin-top:2px; }
-  .ex-chevron { color:var(--accent); font-size:18px; transition:transform 0.25s; }
+  .ex-meta { color:var(--muted); font-size:13px; margin-top:3px; }
+  .ex-chevron { color:var(--accent); font-size:20px; transition:transform 0.25s; flex-shrink:0; margin-left:8px; }
   .ex-card.open .ex-chevron { transform:rotate(180deg); }
 
   /* EXPANDED CONTENT */
@@ -112,10 +139,81 @@
   .ex-card.open .ex-body { display:block; }
   .ex-divider { height:1px; background:rgba(var(--accent-rgb),0.2); margin-bottom:14px; }
 
+  /* MEDIA THUMBNAIL STRIP */
+  .media-strip {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+    margin-top: 12px;
+    margin-bottom: 0;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+  }
+  .media-strip::-webkit-scrollbar { display: none; }
+
+  .media-thumb {
+    flex-shrink: 0;
+    width: 88px;
+    height: 88px;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    background: rgba(255,255,255,0.05);
+    border: 1.5px solid var(--border);
+    scroll-snap-align: start;
+    transition: transform 0.12s, border-color 0.15s;
+  }
+  .media-thumb:active { transform: scale(0.93); }
+  .media-thumb img, .media-thumb video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .media-thumb .play-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.38);
+  }
+  .play-icon-circle {
+    width: 30px;
+    height: 30px;
+    background: rgba(255,255,255,0.92);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: #111;
+    padding-left: 2px;
+  }
+  .media-more-thumb {
+    flex-shrink: 0;
+    width: 88px;
+    height: 88px;
+    border-radius: 12px;
+    border: 1.5px dashed var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    color: var(--muted);
+    font-size: 22px;
+    cursor: default;
+  }
+  .media-more-thumb span { font-size: 11px; font-weight: 700; letter-spacing: 1px; }
+
   .machine-block { border-radius:12px; overflow:hidden; margin-bottom:10px; }
   .machine-label {
     background:rgba(var(--accent-rgb),0.15); border-radius:12px;
-    padding:10px 14px;
+    padding:12px 14px;
   }
   .machine-label-tag { font-size:10px; color:var(--accent); font-weight:700; letter-spacing:3px; text-transform:uppercase; margin-bottom:3px; }
   .machine-label-name { font-size:14px; font-weight:700; }
@@ -124,18 +222,24 @@
     background:rgba(var(--accent-rgb),0.1);
     border-left:3px solid var(--accent);
     border-radius:0 10px 10px 0;
-    padding:10px 14px;
+    padding:12px 14px;
   }
   .tip-tag { font-size:10px; color:var(--accent); font-weight:700; letter-spacing:3px; text-transform:uppercase; margin-bottom:4px; }
-  .tip-text { font-size:13px; color:rgba(240,240,248,0.75); line-height:1.6; }
+  .tip-text { font-size:13px; color:rgba(240,240,248,0.75); line-height:1.65; }
 
   /* TIPS SECTION */
   .tips-section { padding:8px 16px 24px; }
   .tips-box { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:18px; }
   .tips-title { font-size:11px; color:#FF6B35; font-weight:700; letter-spacing:3px; text-transform:uppercase; margin-bottom:14px; }
-  .tip-item { font-size:13px; color:var(--muted); padding:8px 12px; background:rgba(255,255,255,0.04); border-radius:8px; margin-bottom:6px; line-height:1.5; }
+  .tip-item { font-size:13px; color:var(--muted); padding:10px 12px; background:rgba(255,255,255,0.04); border-radius:8px; margin-bottom:6px; line-height:1.5; }
 
-  .footer { text-align:center; padding:12px 16px; color:rgba(255,255,255,0.18); font-size:11px; }
+  .footer {
+    text-align:center;
+    padding:12px 16px;
+    padding-bottom: max(28px, calc(var(--safe-bottom) + 14px));
+    color:rgba(255,255,255,0.18);
+    font-size:11px;
+  }
 
   /* STRETCH SECTION */
   .stretch-section-header {
@@ -152,6 +256,118 @@
 
   @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
   .day-content { animation: fadeIn 0.3s ease; }
+
+  /* ─── LIGHTBOX ─── */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.96);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease;
+    overscroll-behavior: none;
+  }
+  .lightbox.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .lightbox-media-wrap {
+    max-width: 100%;
+    max-height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 72px 16px max(72px, calc(var(--safe-bottom) + 56px));
+  }
+  .lightbox-media-wrap img {
+    max-width: calc(100vw - 32px);
+    max-height: calc(100dvh - 144px);
+    border-radius: 14px;
+    object-fit: contain;
+    display: none;
+  }
+  .lightbox-media-wrap video {
+    max-width: calc(100vw - 32px);
+    max-height: calc(100dvh - 144px);
+    border-radius: 14px;
+    display: none;
+    background: #000;
+  }
+  .lightbox-close {
+    position: fixed;
+    top: max(18px, calc(var(--safe-top) + 10px));
+    right: max(16px, var(--safe-right));
+    width: 46px; height: 46px;
+    background: rgba(255,255,255,0.13);
+    border: 1px solid rgba(255,255,255,0.18);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 50%;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 10001;
+    font-family: 'DM Sans', sans-serif; font-weight: 700;
+    -webkit-user-select:none; user-select:none;
+    transition: background 0.15s;
+  }
+  .lightbox-close:active { background: rgba(255,255,255,0.25); }
+  .lightbox-nav {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px; height: 48px;
+    background: rgba(255,255,255,0.13);
+    border: 1px solid rgba(255,255,255,0.18);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 50%;
+    color: #fff;
+    font-size: 26px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 10001;
+    -webkit-user-select:none; user-select:none;
+    transition: background 0.15s;
+  }
+  .lightbox-nav:active { background: rgba(255,255,255,0.28); }
+  .lightbox-prev { left: max(12px, var(--safe-left)); }
+  .lightbox-next { right: max(12px, var(--safe-right)); }
+  .lightbox-counter {
+    position: fixed;
+    bottom: max(28px, calc(var(--safe-bottom) + 16px));
+    left: 50%; transform: translateX(-50%);
+    color: rgba(255,255,255,0.82);
+    font-size: 13px; font-weight: 600;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 7px 18px;
+    border-radius: 20px;
+    white-space: nowrap;
+    z-index: 10001;
+  }
+  .lightbox-badge {
+    position: fixed;
+    top: max(18px, calc(var(--safe-top) + 10px));
+    left: max(16px, var(--safe-left));
+    font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    color: rgba(255,255,255,0.75);
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 6px 12px;
+    border-radius: 8px;
+    z-index: 10001;
+  }
+  @keyframes lbPop { from{opacity:0;transform:scale(0.93)} to{opacity:1;transform:scale(1)} }
+  .lb-anim { animation: lbPop 0.18s ease; }
 </style>
 </head>
 <body>
@@ -160,10 +376,24 @@
   <div class="header-label">Punit's Program</div>
   <h1>7-Day Full Body<br/><span>Gym Plan</span></h1>
   <p>60 min/day &nbsp;·&nbsp; Machine-based &nbsp;·&nbsp; Beginner friendly</p>
+  <p id="header-date" style="color:var(--muted);font-size:13px;margin-top:6px;opacity:0.7;"></p>
 </div>
 
 <div class="tabs" id="tabs"></div>
 <div id="content"></div>
+
+<!-- Lightbox — lives outside #content so it survives re-renders -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <div class="lightbox-badge" id="lb-badge">📷 PHOTO</div>
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <div class="lightbox-media-wrap" onclick="event.stopPropagation()">
+    <img id="lb-img" alt="Exercise photo"/>
+    <video id="lb-vid" controls playsinline></video>
+  </div>
+  <button class="lightbox-nav lightbox-prev" id="lb-prev" onclick="lightboxPrev(event)">‹</button>
+  <button class="lightbox-nav lightbox-next" id="lb-next" onclick="lightboxNext(event)">›</button>
+  <div class="lightbox-counter" id="lb-counter">1 / 1</div>
+</div>
 
 <script>
 const days = [
@@ -411,10 +641,137 @@ const tips = [
   "🙋 Ask gym staff to show you any machine before your first use",
 ];
 
-let activeDay = 0;
+// Map JS getDay() (0=Sun … 6=Sat) → days array index (0=Mon … 6=Sun)
+let activeDay = (new Date().getDay() + 6) % 7;
+
+// Render today's date in the header
+(function() {
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-GB', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+  document.getElementById('header-date').textContent = dateStr;
+})();
 let openEx = null;
 let openStretch = null;
 
+// ── Media / Lightbox state ─────────────────────────────────────────
+let lightboxMedia = [];
+let lightboxIndex = 0;
+let lbTouchX = 0;
+
+const MEDIA_MAX = 6;
+
+function nameToSlug(name) {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
+// Renders up to MEDIA_MAX image + video thumbnails named by convention:
+//   media/{slug}-1.jpg, media/{slug}-2.jpg, ...
+//   media/{slug}-1.mp4, media/{slug}-2.mp4, ...
+// onerror removes the tile; when all tiles are gone the strip self-removes.
+function renderMediaStrip(exName) {
+  const slug = nameToSlug(exName);
+  let html = '';
+  for (let i = 1; i <= MEDIA_MAX; i++) {
+    html += `<div class="media-thumb" onclick="openMediaByThumb(event,this)">
+      <img src="media/${slug}-${i}.jpg" loading="lazy" onerror="removeThumb(this)" alt=""/>
+    </div>`;
+  }
+  for (let i = 1; i <= MEDIA_MAX; i++) {
+    html += `<div class="media-thumb" onclick="openMediaByThumb(event,this)">
+      <video src="media/${slug}-${i}.mp4" preload="metadata" muted playsinline onerror="removeThumb(this)"></video>
+      <div class="play-overlay"><div class="play-icon-circle">▶</div></div>
+    </div>`;
+    html += `<div class="media-thumb" onclick="openMediaByThumb(event,this)">
+      <video src="media/${slug}-${i}.mov" preload="metadata" muted playsinline onerror="removeThumb(this)"></video>
+      <div class="play-overlay"><div class="play-icon-circle">▶</div></div>
+    </div>`;
+  }
+  return `<div class="media-strip">${html}</div>`;
+}
+
+function removeThumb(el) {
+  const thumb = el.closest('.media-thumb');
+  const strip = thumb ? thumb.closest('.media-strip') : null;
+  if (thumb) thumb.remove();
+  if (strip && !strip.querySelector('.media-thumb')) strip.remove();
+}
+
+function openMediaByThumb(e, thumbEl) {
+  e.stopPropagation();
+  const strip = thumbEl.closest('.media-strip');
+  const thumbs = Array.from(strip.querySelectorAll('.media-thumb'));
+  lightboxIndex = thumbs.indexOf(thumbEl);
+  lightboxMedia = thumbs.map(t => {
+    const v = t.querySelector('video');
+    return v ? { type: 'video', src: v.src } : { type: 'image', src: t.querySelector('img').src };
+  });
+  showLightbox();
+}
+
+function showLightbox() {
+  const lb   = document.getElementById('lightbox');
+  const img  = document.getElementById('lb-img');
+  const vid  = document.getElementById('lb-vid');
+  const ctr  = document.getElementById('lb-counter');
+  const badge = document.getElementById('lb-badge');
+  const prev = document.getElementById('lb-prev');
+  const next = document.getElementById('lb-next');
+
+  const item = lightboxMedia[lightboxIndex];
+  if (!item) return;
+
+  // Pause/hide previous
+  vid.pause();
+  img.style.display = 'none';
+  vid.style.display = 'none';
+  img.classList.remove('lb-anim');
+  vid.classList.remove('lb-anim');
+
+  if (item.type === 'video') {
+    vid.src = item.src;
+    vid.load();
+    vid.style.display = 'block';
+    void vid.offsetWidth; // reflow to restart animation
+    vid.classList.add('lb-anim');
+    badge.textContent = '▶ VIDEO';
+  } else {
+    img.src = item.src;
+    img.style.display = 'block';
+    void img.offsetWidth;
+    img.classList.add('lb-anim');
+    badge.textContent = '📷 PHOTO';
+  }
+
+  ctr.textContent = `${lightboxIndex + 1} / ${lightboxMedia.length}`;
+  const multi = lightboxMedia.length > 1;
+  prev.style.display = multi ? 'flex' : 'none';
+  next.style.display = multi ? 'flex' : 'none';
+
+  lb.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  const lb  = document.getElementById('lightbox');
+  const vid = document.getElementById('lb-vid');
+  vid.pause();
+  lb.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function lightboxNext(e) {
+  if (e) e.stopPropagation();
+  lightboxIndex = (lightboxIndex + 1) % lightboxMedia.length;
+  showLightbox();
+}
+
+function lightboxPrev(e) {
+  if (e) e.stopPropagation();
+  lightboxIndex = (lightboxIndex - 1 + lightboxMedia.length) % lightboxMedia.length;
+  showLightbox();
+}
+
+// ── Render ─────────────────────────────────────────────────────────
 function render() {
   const day = days[activeDay];
   document.documentElement.style.setProperty('--accent', day.accent);
@@ -448,7 +805,9 @@ function render() {
                 <div>
                   <div class="ex-name-row">
                     <div class="ex-name">${ex.name}</div>
-                    <button class="copy-btn" onclick="copyText(event, '${ex.name}')" title="Copy"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+                    <button class="copy-btn" onclick="copyText(event, '${ex.name.replace(/'/g,"&#39;")}')" title="Copy">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    </button>
                   </div>
                   <div class="ex-meta">${ex.sets} &nbsp;·&nbsp; ${ex.reps}</div>
                 </div>
@@ -467,9 +826,10 @@ function render() {
                 <div class="tip-tag">💡 Beginner Tip</div>
                 <div class="tip-text">${ex.tip}</div>
               </div>
+              ${renderMediaStrip(ex.name)}
             </div>
-          </div>
-        `).join('')}
+          </div>`
+        ).join('')}
       </div>
 
       ${day.stretches && day.stretches.length > 0 ? `
@@ -482,14 +842,16 @@ function render() {
       </div>
       <div class="exercises">
         ${day.stretches.map((str, i) => `
-          <div class="ex-card stretch-card ${openStretch === i ? 'open' : ''}" onclick="toggleStretch(${i})">
+          <div class="ex-card stretch-card ${openStretch === i ? 'open' : ''}" onclick="toggleStretch(${i})" style="${openStretch===i?'border-color:rgba(120,80,220,0.5);':''}">
             <div class="ex-header">
               <div class="ex-left">
                 <div class="ex-num" style="background:rgba(120,80,220,0.18);color:#a78bfa;font-size:16px;">🧘</div>
                 <div>
                   <div class="ex-name-row">
                     <div class="ex-name">${str.name}</div>
-                    <button class="copy-btn" style="color:#a78bfa;background:rgba(120,80,220,0.15);" onclick="copyText(event, '${str.name}')" title="Copy"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+                    <button class="copy-btn" style="color:#a78bfa;background:rgba(120,80,220,0.15);" onclick="copyText(event, '${str.name.replace(/'/g,"&#39;")}')" title="Copy">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    </button>
                   </div>
                   <div class="ex-meta">${str.sets} &nbsp;·&nbsp; ${str.reps}</div>
                 </div>
@@ -508,9 +870,10 @@ function render() {
                 <div class="tip-tag" style="color:#a78bfa;">💡 How to stretch</div>
                 <div class="tip-text">${str.tip}</div>
               </div>
+              ${renderMediaStrip(str.name)}
             </div>
-          </div>
-        `).join('')}
+          </div>`
+        ).join('')}
       </div>
       ` : ''}
 
@@ -521,7 +884,7 @@ function render() {
         </div>
       </div>
 
-      <div class="footer">Tap any exercise to see the machine &amp; tips</div>
+      <div class="footer">Tap any exercise to see the machine &amp; tips &nbsp;·&nbsp; Add photos to the <strong>media/</strong> folder</div>
     </div>
   `;
 }
@@ -530,10 +893,10 @@ function copyText(e, text) {
   e.stopPropagation();
   const btn = e.currentTarget;
   navigator.clipboard.writeText(text).then(() => {
-    btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
     btn.classList.add('copied');
     setTimeout(() => {
-      btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
       btn.classList.remove('copied');
     }, 1500);
   });
@@ -556,9 +919,32 @@ function toggleStretch(i) {
   render();
 }
 
+// ── Lightbox touch/keyboard ────────────────────────────────────────
+(function() {
+  const lb = document.getElementById('lightbox');
+
+  lb.addEventListener('touchstart', e => {
+    lbTouchX = e.touches[0].clientX;
+  }, { passive: true });
+
+  lb.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - lbTouchX;
+    if (Math.abs(dx) > 48) {
+      if (dx > 0) lightboxPrev();
+      else lightboxNext();
+    }
+  }, { passive: true });
+
+  document.addEventListener('keydown', e => {
+    if (!lb.classList.contains('active')) return;
+    if (e.key === 'Escape')      closeLightbox();
+    else if (e.key === 'ArrowRight') lightboxNext();
+    else if (e.key === 'ArrowLeft')  lightboxPrev();
+  });
+})();
+
 render();
 
-// Register service worker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js').catch(() => {});
