@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>Media Prep · Gym Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700;900&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #080810;
+  --card: #10101e;
+  --card2: #13132a;
+  --border: rgba(255,255,255,0.08);
+  --text: #f0f0f8;
+  --muted: rgba(240,240,248,0.45);
+  --accent: #FF6B35;
+  --green: #10B981;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html { height: -webkit-fill-available; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh; min-height: -webkit-fill-available;
+}
+
+/* HEADER */
+.header {
+  background: linear-gradient(135deg, #0d0d20 0%, #131330 60%, #0d1a3a 100%);
+  padding: max(36px, calc(var(--safe-top) + 20px)) 20px 24px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+.header::before {
+  content:''; position:absolute; top:-50px; right:-50px;
+  width:200px; height:200px;
+  background: radial-gradient(circle, rgba(255,107,53,0.16) 0%, transparent 70%);
+  border-radius:50%;
+}
+.header-label { font-size:11px; letter-spacing:4px; color:var(--accent); text-transform:uppercase; font-weight:700; margin-bottom:8px; }
+.header h1 { font-family:'Bebas Neue', sans-serif; font-size:38px; line-height:1; letter-spacing:2px; }
+.header h1 span { color:var(--accent); }
+.header p { color:var(--muted); font-size:13px; margin-top:8px; }
+
+/* MAIN LAYOUT */
+.main { max-width: 680px; margin: 0 auto; padding: 20px 16px; padding-bottom: max(32px, calc(var(--safe-bottom) + 20px)); }
+
+/* SECTION CARD */
+.section {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 18px; padding: 20px; margin-bottom: 14px;
+}
+.section-label {
+  font-size: 10px; color: var(--accent); font-weight: 700;
+  letter-spacing: 3px; text-transform: uppercase; margin-bottom: 14px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+/* SELECT */
+.select-wrap { position: relative; }
+select {
+  width: 100%;
+  background: rgba(255,255,255,0.06); border: 1.5px solid var(--border);
+  border-radius: 12px; color: var(--text);
+  font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600;
+  padding: 14px 40px 14px 16px;
+  appearance: none; -webkit-appearance: none;
+  cursor: pointer; outline: none;
+  transition: border-color 0.2s;
+}
+select:focus { border-color: var(--accent); }
+select option { background: #14142a; color: var(--text); }
+select optgroup { color: var(--muted); }
+.select-chevron {
+  position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+  color: var(--accent); font-size: 18px; pointer-events: none;
+}
+
+/* START NUMBER */
+.inline-row { display: flex; gap: 12px; margin-top: 12px; align-items: center; }
+.inline-row label { font-size: 13px; color: var(--muted); white-space: nowrap; }
+input[type=number] {
+  width: 76px; background: rgba(255,255,255,0.06);
+  border: 1.5px solid var(--border); border-radius: 10px;
+  color: var(--text); font-family: 'DM Sans', sans-serif;
+  font-size: 16px; font-weight: 700; padding: 10px 12px;
+  text-align: center; outline: none; transition: border-color 0.2s;
+}
+input[type=number]:focus { border-color: var(--accent); }
+
+/* SLUG PREVIEW */
+.slug-pill {
+  margin-top: 12px; padding: 10px 14px;
+  background: rgba(255,107,53,0.1); border: 1px solid rgba(255,107,53,0.22);
+  border-radius: 10px; font-size: 12px; color: var(--accent);
+  font-family: monospace; letter-spacing: 0.3px; line-height: 1.7;
+  word-break: break-all;
+}
+
+/* SLIDERS */
+.slider-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.slider-row:last-child { margin-bottom: 0; }
+.slider-row label { font-size: 13px; color: var(--muted); min-width: 90px; }
+input[type=range] {
+  flex: 1; -webkit-appearance: none; height: 5px;
+  border-radius: 3px; background: rgba(255,255,255,0.12); outline: none;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 20px; height: 20px;
+  border-radius: 50%; background: var(--accent); cursor: pointer;
+  box-shadow: 0 0 0 3px rgba(255,107,53,0.2);
+}
+.slider-val { font-size: 14px; font-weight: 700; color: var(--accent); min-width: 52px; text-align: right; }
+
+/* DROP ZONE */
+.dropzone {
+  border: 2px dashed rgba(255,255,255,0.15); border-radius: 16px;
+  padding: 40px 20px; text-align: center; cursor: pointer;
+  transition: border-color 0.2s, background 0.2s; position: relative;
+  background: rgba(255,255,255,0.02);
+}
+.dropzone.drag-over { border-color: var(--accent); background: rgba(255,107,53,0.06); }
+.drop-icon { font-size: 44px; margin-bottom: 12px; line-height: 1; }
+.drop-title { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+.drop-sub { font-size: 13px; color: var(--muted); }
+.drop-input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+
+/* PROGRESS */
+.progress-wrap { margin-top: 14px; display: none; }
+.progress-wrap.show { display: block; }
+.progress-label { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+.progress-track { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.25s; }
+
+/* ACTION BUTTONS */
+.btn-row { display: flex; gap: 10px; }
+.btn {
+  flex: 1; padding: 15px 16px; border-radius: 13px; border: none;
+  font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700;
+  cursor: pointer; min-height: 50px;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: opacity 0.2s, transform 0.1s;
+}
+.btn:active { transform: scale(0.97); }
+.btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-ghost { background: rgba(255,255,255,0.08); color: var(--text); }
+
+/* RESULTS HEADER */
+.results-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.results-count { font-size: 22px; font-weight: 900; }
+.results-count span { color: var(--accent); }
+.results-saved { font-size: 12px; color: var(--green); font-weight: 700; }
+
+/* PREVIEW GRID */
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+}
+@media (max-width: 380px) {
+  .preview-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* PREVIEW CARD */
+.preview-card {
+  background: var(--card2); border: 1px solid var(--border);
+  border-radius: 14px; overflow: hidden; position: relative;
+}
+@keyframes cardIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+.preview-card { animation: cardIn 0.2s ease both; }
+
+.thumb-wrap {
+  width: 100%; aspect-ratio: 1; position: relative;
+  background: rgba(0,0,0,0.3); overflow: hidden;
+}
+.thumb-wrap img, .thumb-wrap video {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+.thumb-wrap video { cursor: pointer; }
+
+/* Video tap-to-play overlay */
+.play-overlay {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.play-circle {
+  width: 40px; height: 40px;
+  background: rgba(255,255,255,0.88);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; color: #000; padding-left: 3px;
+}
+.thumb-wrap video.playing + .play-overlay { opacity: 0; }
+.thumb-wrap video:not([data-playing]) ~ .play-overlay { opacity: 1; }
+
+.type-badge {
+  position: absolute; top: 8px; left: 8px;
+  font-size: 9px; font-weight: 700; letter-spacing: 1.5px;
+  padding: 3px 7px; border-radius: 6px;
+  background: rgba(0,0,0,0.65); color: rgba(255,255,255,0.9);
+  text-transform: uppercase;
+}
+.remove-btn {
+  position: absolute; top: 7px; right: 7px;
+  width: 26px; height: 26px;
+  background: rgba(0,0,0,0.65); border: none; border-radius: 50%;
+  color: rgba(255,255,255,0.8); font-size: 13px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  line-height: 1;
+}
+.remove-btn:active { background: rgba(239,68,68,0.7); }
+
+.card-info { padding: 10px 10px 12px; }
+.card-name {
+  font-size: 11px; font-weight: 700; color: var(--accent);
+  font-family: monospace; word-break: break-all; margin-bottom: 4px;
+  line-height: 1.4;
+}
+.card-size { font-size: 11px; color: var(--muted); }
+.card-size .saved { color: var(--green); }
+.card-size .arrow { color: rgba(255,255,255,0.2); }
+
+.dl-btn {
+  display: block; width: calc(100% - 20px); margin: 0 10px 10px;
+  padding: 9px 10px;
+  background: rgba(255,107,53,0.15); border: none; border-radius: 9px;
+  color: var(--accent); font-family: 'DM Sans', sans-serif;
+  font-size: 12px; font-weight: 700; cursor: pointer;
+  transition: background 0.15s; text-align: center; line-height: 1;
+}
+.dl-btn:active { background: rgba(255,107,53,0.32); }
+
+/* Empty state */
+.empty-state { padding: 32px 0; text-align: center; color: var(--muted); }
+.empty-state .icon { font-size: 40px; margin-bottom: 10px; }
+.empty-state p { font-size: 14px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-label">Gym Plan Tools</div>
+  <h1>Media <span>Prep</span></h1>
+  <p>Rename · Resize · Download &nbsp;·&nbsp; Drop into the media/ folder</p>
+</div>
+
+<div class="main">
+
+  <!-- ① Exercise + numbering -->
+  <div class="section">
+    <div class="section-label">① Select Exercise</div>
+    <div class="select-wrap">
+      <select id="exSelect" onchange="onSettingChange()">
+        <option value="">— choose an exercise —</option>
+        <optgroup label="💪 Monday — Push Day">
+          <option>Warm-up</option>
+          <option>Chest Press</option>
+          <option>Pec Deck Fly</option>
+          <option>Cable Crossover</option>
+          <option>Tricep Pushdown</option>
+          <option>Overhead Tricep Extension</option>
+          <option>Doorway Chest Stretch</option>
+          <option>Overhead Tricep Stretch</option>
+          <option>Shoulder Pendulum Stretch</option>
+        </optgroup>
+        <optgroup label="🏋️ Tuesday — Pull Day">
+          <option>Lat Pulldown</option>
+          <option>Seated Cable Row</option>
+          <option>Assisted Pull-Up</option>
+          <option>Bicep Curl</option>
+          <option>Hammer Curl</option>
+          <option>Child's Pose</option>
+          <option>Cat-Cow Stretch</option>
+          <option>Doorway Bicep Stretch</option>
+        </optgroup>
+        <optgroup label="🦵 Wednesday — Leg Day">
+          <option>Leg Press</option>
+          <option>Leg Extension</option>
+          <option>Leg Curl</option>
+          <option>Hip Abduction</option>
+          <option>Calf Raise</option>
+          <option>Standing Quad Stretch</option>
+          <option>Seated Hamstring Stretch</option>
+          <option>Pigeon Pose (Glute Stretch)</option>
+          <option>Kneeling Hip Flexor Stretch</option>
+        </optgroup>
+        <optgroup label="🎯 Thursday — Shoulder Day">
+          <option>Shoulder Press</option>
+          <option>Lateral Raise</option>
+          <option>Front Raise</option>
+          <option>Plank Hold</option>
+          <option>Cable Crunch</option>
+          <option>Cross-Body Shoulder Stretch</option>
+          <option>Doorway Shoulder Opener</option>
+          <option>Seated Spinal Twist</option>
+        </optgroup>
+        <optgroup label="🔥 Friday — Compound Day">
+          <option>Smith Machine Squat</option>
+          <option>Smith Machine RDL</option>
+          <option>Chest Press Machine</option>
+          <option>Lat Pulldown</option>
+          <option>Leg Press (Burnout)</option>
+          <option>Kneeling Hip Flexor Stretch</option>
+          <option>Lat Side Stretch</option>
+          <option>Standing Chest &amp; Rear Shoulder Stretch</option>
+        </optgroup>
+        <optgroup label="🚴 Saturday — Active Recovery">
+          <option>Interval Run/Walk</option>
+          <option>Elliptical</option>
+          <option>Ab Crunch Machine</option>
+          <option>Hanging Knee Raise</option>
+          <option>Cool-down Row</option>
+          <option>Cobra Stretch</option>
+          <option>Lying Knee-to-Chest</option>
+          <option>Seated Forward Fold</option>
+        </optgroup>
+        <optgroup label="😴 Sunday — Rest Day">
+          <option>Light Walk</option>
+          <option>Full Body Stretch</option>
+          <option>Foam Rolling</option>
+          <option>Supine Hamstring Stretch</option>
+          <option>Figure-Four Hip Stretch</option>
+          <option>Thread-the-Needle Shoulder Stretch</option>
+          <option>Butterfly Groin Stretch</option>
+        </optgroup>
+      </select>
+      <div class="select-chevron">▾</div>
+    </div>
+
+    <div class="inline-row">
+      <label>Start numbering from</label>
+      <input type="number" id="startNum" value="1" min="1" max="99" oninput="onSettingChange()"/>
+    </div>
+
+    <div class="slug-pill" id="slugPill">Select an exercise above to preview filenames</div>
+  </div>
+
+  <!-- ② Image settings -->
+  <div class="section">
+    <div class="section-label">② Image Compression</div>
+    <div class="slider-row">
+      <label>Quality</label>
+      <input type="range" id="quality" min="30" max="95" value="72"
+             oninput="document.getElementById('qVal').textContent=this.value+'%'"/>
+      <div class="slider-val" id="qVal">72%</div>
+    </div>
+    <div class="slider-row">
+      <label>Max dimension</label>
+      <input type="range" id="maxDim" min="400" max="2400" step="100" value="1200"
+             oninput="document.getElementById('dimVal').textContent=this.value+'px'"/>
+      <div class="slider-val" id="dimVal">1200px</div>
+    </div>
+  </div>
+
+  <!-- ③ Upload -->
+  <div class="section">
+    <div class="section-label">③ Upload Files</div>
+    <div class="dropzone" id="dropzone">
+      <div class="drop-icon">📂</div>
+      <div class="drop-title">Drop photos &amp; videos here</div>
+      <div class="drop-sub">or tap to browse &nbsp;·&nbsp; JPG · PNG · MP4 · MOV</div>
+      <input type="file" class="drop-input" id="fileInput" accept="image/*,video/*" multiple/>
+    </div>
+    <div class="progress-wrap" id="progressWrap">
+      <div class="progress-label" id="progressLabel">Processing…</div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <!-- ④ Results -->
+  <div class="section" id="resultsSection" style="display:none;">
+    <div class="section-label">④ Download</div>
+
+    <div class="results-meta">
+      <div class="results-count" id="resultsCount"><span>0</span> files ready</div>
+      <div class="results-saved" id="resultsSaved"></div>
+    </div>
+
+    <div class="btn-row" style="margin-bottom:16px;">
+      <button class="btn btn-primary" id="dlAllBtn" onclick="downloadAll()">⬇ Download All</button>
+      <button class="btn btn-ghost" onclick="clearAll()">✕ Clear All</button>
+    </div>
+
+    <div class="preview-grid" id="previewGrid"></div>
+  </div>
+
+</div>
+
+<script>
+const files = []; // { newName, blob, blobUrl, type, origSize, newSize }
+
+// ── Slug + preview ────────────────────────────────────────────────
+function nameToSlug(name) {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
+function onSettingChange() {
+  const sel = document.getElementById('exSelect').value;
+  const num = parseInt(document.getElementById('startNum').value) || 1;
+  const pill = document.getElementById('slugPill');
+  if (!sel) { pill.textContent = 'Select an exercise above to preview filenames'; return; }
+  const s = nameToSlug(sel);
+  pill.innerHTML =
+    `Images: <b>media/${s}-${num}.jpg</b>, <b>media/${s}-${num+1}.jpg</b>, …<br>` +
+    `Videos: <b>media/${s}-${num}.mp4</b>, <b>media/${s}-${num}.mov</b>, …`;
+}
+
+// ── Drag & drop ───────────────────────────────────────────────────
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('fileInput');
+
+dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('drag-over'); });
+['dragleave','dragend'].forEach(ev => dropzone.addEventListener(ev, () => dropzone.classList.remove('drag-over')));
+dropzone.addEventListener('drop', e => {
+  e.preventDefault(); dropzone.classList.remove('drag-over');
+  processFiles(Array.from(e.dataTransfer.files));
+});
+fileInput.addEventListener('change', () => { processFiles(Array.from(fileInput.files)); fileInput.value = ''; });
+
+// ── Process files ─────────────────────────────────────────────────
+async function processFiles(rawFiles) {
+  const sel = document.getElementById('exSelect').value;
+  if (!sel) { showToast('⚠️ Select an exercise first'); return; }
+
+  const valid = rawFiles.filter(f => f.type.startsWith('image/') || f.type.startsWith('video/'));
+  if (!valid.length) return;
+
+  const slug    = nameToSlug(sel);
+  const quality = parseInt(document.getElementById('quality').value) / 100;
+  const maxDim  = parseInt(document.getElementById('maxDim').value);
+
+  // Determine start numbers — images and videos numbered separately
+  let imgNum = parseInt(document.getElementById('startNum').value) || 1;
+  let vidNum = imgNum;
+
+  const images = valid.filter(f => f.type.startsWith('image/'));
+  const videos = valid.filter(f => f.type.startsWith('video/'));
+
+  // Progress UI
+  const pw   = document.getElementById('progressWrap');
+  const fill = document.getElementById('progressFill');
+  const lbl  = document.getElementById('progressLabel');
+  pw.classList.add('show');
+  let done = 0;
+  const total = valid.length;
+
+  function tick(label) {
+    done++;
+    fill.style.width = Math.round(done / total * 100) + '%';
+    lbl.textContent = label;
+  }
+
+  for (const f of images) {
+    const blob    = await compressImage(f, maxDim, quality);
+    const newName = `${slug}-${imgNum++}.jpg`;
+    files.push({ newName, blob, blobUrl: URL.createObjectURL(blob), type: 'image', origSize: f.size, newSize: blob.size });
+    tick(`Compressed ${newName}`);
+    renderResults();
+  }
+
+  for (const f of videos) {
+    const ext     = (f.name.split('.').pop() || 'mp4').toLowerCase();
+    const newName = `${slug}-${vidNum++}.${ext}`;
+    files.push({ newName, blob: f, blobUrl: URL.createObjectURL(f), type: 'video', origSize: f.size, newSize: f.size });
+    tick(`Renamed ${newName}`);
+    renderResults();
+  }
+
+  // Auto-advance start number for next upload batch
+  document.getElementById('startNum').value = Math.max(imgNum, vidNum);
+  onSettingChange();
+
+  setTimeout(() => { pw.classList.remove('show'); fill.style.width = '0%'; }, 600);
+}
+
+// ── Image compression ─────────────────────────────────────────────
+function compressImage(file, maxDim, quality) {
+  return new Promise(resolve => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      let { width, height } = img;
+      if (width > maxDim || height > maxDim) {
+        if (width >= height) { height = Math.round(height * maxDim / width); width = maxDim; }
+        else                 { width = Math.round(width * maxDim / height);  height = maxDim; }
+      }
+      const c = document.createElement('canvas');
+      c.width = width; c.height = height;
+      c.getContext('2d').drawImage(img, 0, 0, width, height);
+      c.toBlob(blob => resolve(blob), 'image/jpeg', quality);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); resolve(file); };
+    img.src = url;
+  });
+}
+
+// ── Render results ────────────────────────────────────────────────
+function fmt(bytes) {
+  if (bytes < 1024)    return bytes + ' B';
+  if (bytes < 1048576) return (bytes / 1024).toFixed(0) + ' KB';
+  return (bytes / 1048576).toFixed(1) + ' MB';
+}
+
+function renderResults() {
+  const section = document.getElementById('resultsSection');
+  const grid    = document.getElementById('previewGrid');
+  const count   = document.getElementById('resultsCount');
+  const saved   = document.getElementById('resultsSaved');
+
+  if (!files.length) { section.style.display = 'none'; return; }
+  section.style.display = 'block';
+
+  count.innerHTML = `<span>${files.length}</span> file${files.length !== 1 ? 's' : ''} ready`;
+
+  const totalOrig  = files.reduce((s, f) => s + f.origSize, 0);
+  const totalNew   = files.reduce((s, f) => s + f.newSize,  0);
+  const savedBytes = totalOrig - totalNew;
+  saved.textContent = savedBytes > 0
+    ? `Saved ${fmt(savedBytes)} (${Math.round(savedBytes / totalOrig * 100)}%)`
+    : '';
+
+  grid.innerHTML = files.map((f, idx) => {
+    const sizeInfo = f.origSize > f.newSize
+      ? `${fmt(f.origSize)} <span class="arrow">→</span> <span class="saved">${fmt(f.newSize)}</span>`
+      : `<span class="saved">${fmt(f.newSize)}</span>`;
+
+    if (f.type === 'video') {
+      return `
+        <div class="preview-card" style="animation-delay:${idx * 0.04}s">
+          <div class="thumb-wrap">
+            <video src="${f.blobUrl}" preload="metadata" playsinline
+                   onclick="toggleVideo(this)" style="cursor:pointer;"></video>
+            <div class="play-overlay" id="po-${idx}"><div class="play-circle">▶</div></div>
+            <div class="type-badge">VIDEO</div>
+            <button class="remove-btn" onclick="removeFile(${idx})">✕</button>
+          </div>
+          <div class="card-info">
+            <div class="card-name">${f.newName}</div>
+            <div class="card-size">${sizeInfo}</div>
+          </div>
+          <button class="dl-btn" onclick="downloadFile(${idx})">⬇ Download</button>
+        </div>`;
+    }
+
+    return `
+      <div class="preview-card" style="animation-delay:${idx * 0.04}s">
+        <div class="thumb-wrap">
+          <img src="${f.blobUrl}" alt="" loading="lazy"/>
+          <div class="type-badge">IMG</div>
+          <button class="remove-btn" onclick="removeFile(${idx})">✕</button>
+        </div>
+        <div class="card-info">
+          <div class="card-name">${f.newName}</div>
+          <div class="card-size">${sizeInfo}</div>
+        </div>
+        <button class="dl-btn" onclick="downloadFile(${idx})">⬇ Download</button>
+      </div>`;
+  }).join('');
+}
+
+// ── Video tap-to-play ─────────────────────────────────────────────
+function toggleVideo(vid) {
+  const overlay = vid.parentElement.querySelector('.play-overlay');
+  if (vid.paused) {
+    vid.play();
+    if (overlay) overlay.style.opacity = '0';
+  } else {
+    vid.pause();
+    if (overlay) overlay.style.opacity = '1';
+  }
+}
+
+// ── Download ──────────────────────────────────────────────────────
+function downloadFile(idx) {
+  const f = files[idx];
+  const a = document.createElement('a');
+  a.href = f.blobUrl; a.download = f.newName;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+}
+
+async function downloadAll() {
+  const btn = document.getElementById('dlAllBtn');
+  btn.disabled = true;
+  btn.textContent = 'Downloading…';
+  for (let i = 0; i < files.length; i++) {
+    downloadFile(i);
+    await new Promise(r => setTimeout(r, 150));
+  }
+  btn.disabled = false;
+  btn.textContent = '⬇ Download All';
+}
+
+function removeFile(idx) {
+  URL.revokeObjectURL(files[idx].blobUrl);
+  files.splice(idx, 1);
+  renderResults();
+}
+
+function clearAll() {
+  files.forEach(f => URL.revokeObjectURL(f.blobUrl));
+  files.length = 0;
+  document.getElementById('startNum').value = 1;
+  onSettingChange();
+  renderResults();
+}
+
+// ── Toast ─────────────────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.textContent = msg;
+  Object.assign(t.style, {
+    position:'fixed', bottom:'32px', left:'50%', transform:'translateX(-50%)',
+    background:'rgba(30,30,50,0.95)', color:'#f0f0f8', padding:'12px 20px',
+    borderRadius:'12px', fontSize:'14px', fontWeight:'700', zIndex:'9999',
+    border:'1px solid rgba(255,255,255,0.1)', backdropFilter:'blur(10px)',
+    whiteSpace:'nowrap', pointerEvents:'none',
+  });
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2200);
+}
+</script>
+</body>
+</html>

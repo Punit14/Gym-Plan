@@ -659,41 +659,61 @@ let lightboxIndex = 0;
 let lbTouchX = 0;
 
 const MEDIA_MAX = 6;
+const mediaCache = {}; // slug → found[] once probed; undefined = not yet checked
 
 function nameToSlug(name) {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 }
 
-// Renders up to MEDIA_MAX image + video thumbnails named by convention:
-//   media/{slug}-1.jpg, media/{slug}-2.jpg, ...
-//   media/{slug}-1.mp4, media/{slug}-2.mp4, ...
-// onerror removes the tile; when all tiles are gone the strip self-removes.
+// Returns the strip HTML. Already-probed exercises render inline; new ones
+// get an invisible placeholder that fills in once HEAD probes complete.
 function renderMediaStrip(exName) {
   const slug = nameToSlug(exName);
-  let html = '';
-  for (let i = 1; i <= MEDIA_MAX; i++) {
-    html += `<div class="media-thumb" onclick="openMediaByThumb(event,this)">
-      <img src="media/${slug}-${i}.jpg" loading="lazy" onerror="removeThumb(this)" alt=""/>
-    </div>`;
-  }
-  for (let i = 1; i <= MEDIA_MAX; i++) {
-    html += `<div class="media-thumb" onclick="openMediaByThumb(event,this)">
-      <video src="media/${slug}-${i}.mp4" preload="metadata" muted playsinline onerror="removeThumb(this)"></video>
-      <div class="play-overlay"><div class="play-icon-circle">▶</div></div>
-    </div>`;
-    html += `<div class="media-thumb" onclick="openMediaByThumb(event,this)">
-      <video src="media/${slug}-${i}.mov" preload="metadata" muted playsinline onerror="removeThumb(this)"></video>
-      <div class="play-overlay"><div class="play-icon-circle">▶</div></div>
-    </div>`;
-  }
-  return `<div class="media-strip">${html}</div>`;
+  const id = 'ms-' + slug;
+  if (mediaCache[slug] !== undefined) return buildStripHTML(id, mediaCache[slug]);
+  probeMedia(slug, id); // fires async, updates DOM when done
+  return `<div class="media-strip" id="${id}" style="display:none;margin:0;"></div>`;
 }
 
-function removeThumb(el) {
-  const thumb = el.closest('.media-thumb');
-  const strip = thumb ? thumb.closest('.media-strip') : null;
-  if (thumb) thumb.remove();
-  if (strip && !strip.querySelector('.media-thumb')) strip.remove();
+// Parallel HEAD requests — no body transferred, works on GitHub Pages.
+async function probeMedia(slug, id) {
+  const candidates = [];
+  for (let i = 1; i <= MEDIA_MAX; i++) {
+    candidates.push({ type: 'image', src: `media/${slug}-${i}.jpg` });
+    candidates.push({ type: 'video', src: `media/${slug}-${i}.mp4` });
+    candidates.push({ type: 'video', src: `media/${slug}-${i}.mov` });
+  }
+  const results = await Promise.all(
+    candidates.map(c =>
+      fetch(c.src, { method: 'HEAD' }).then(r => r.ok ? c : null).catch(() => null)
+    )
+  );
+  const found = results.filter(Boolean);
+  mediaCache[slug] = found;
+
+  const strip = document.getElementById(id);
+  if (!strip) return; // card was closed before probe finished
+  if (!found.length) { strip.remove(); return; }
+  strip.removeAttribute('style'); // let CSS take over (margin-top etc.)
+  strip.innerHTML = thumbsHTML(found);
+}
+
+function buildStripHTML(id, found) {
+  if (!found.length) return '';
+  return `<div class="media-strip" id="${id}">${thumbsHTML(found)}</div>`;
+}
+
+function thumbsHTML(items) {
+  return items.map(item =>
+    item.type === 'video'
+      ? `<div class="media-thumb" onclick="openMediaByThumb(event,this)">
+           <video src="${item.src}" preload="metadata" muted playsinline></video>
+           <div class="play-overlay"><div class="play-icon-circle">▶</div></div>
+         </div>`
+      : `<div class="media-thumb" onclick="openMediaByThumb(event,this)">
+           <img src="${item.src}" loading="lazy" alt=""/>
+         </div>`
+  ).join('');
 }
 
 function openMediaByThumb(e, thumbEl) {
