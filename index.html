@@ -814,6 +814,8 @@ function render() {
     </button>
   `).join('');
 
+  tabsEl.querySelector('.tab.active')?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+
   document.getElementById('content').innerHTML = `
     <div class="day-content">
       <div class="day-hero">
@@ -940,14 +942,20 @@ function switchDay(i) {
 
 function toggleEx(i) {
   document.getElementById('ex-' + openEx)?.classList.remove('open');
-  openEx = (openEx === i) ? null : i;
-  document.getElementById('ex-' + openEx)?.classList.add('open');
+  const closing = openEx === i;
+  openEx = closing ? null : i;
+  const card = document.getElementById('ex-' + openEx);
+  card?.classList.add('open');
+  if (!closing && card) setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
 }
 
 function toggleStretch(i) {
   document.getElementById('str-' + openStretch)?.classList.remove('open');
-  openStretch = (openStretch === i) ? null : i;
-  document.getElementById('str-' + openStretch)?.classList.add('open');
+  const closing = openStretch === i;
+  openStretch = closing ? null : i;
+  const card = document.getElementById('str-' + openStretch);
+  card?.classList.add('open');
+  if (!closing && card) setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
 }
 
 // ── Lightbox touch/keyboard ────────────────────────────────────────
