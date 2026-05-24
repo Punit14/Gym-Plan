@@ -946,7 +946,7 @@ function toggleEx(i) {
   openEx = closing ? null : i;
   const card = document.getElementById('ex-' + openEx);
   card?.classList.add('open');
-  if (!closing && card) setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+  if (!closing && card) requestAnimationFrame(() => card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
 }
 
 function toggleStretch(i) {
@@ -955,7 +955,7 @@ function toggleStretch(i) {
   openStretch = closing ? null : i;
   const card = document.getElementById('str-' + openStretch);
   card?.classList.add('open');
-  if (!closing && card) setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+  if (!closing && card) requestAnimationFrame(() => card.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
 }
 
 // ── Lightbox touch/keyboard ────────────────────────────────────────
