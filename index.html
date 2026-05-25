@@ -313,7 +313,7 @@
   .footer {
     text-align:center;
     padding:12px 16px;
-    padding-bottom: max(28px, calc(var(--safe-bottom) + 14px));
+    padding-bottom: max(16px, calc(var(--safe-bottom) + 8px));
     color:rgba(255,255,255,0.18);
     font-size:11px;
   }
@@ -593,7 +593,7 @@ const days = [
     exercises:[
       { name:"Warm-up", sets:"7–8 min", reps:"Incline Walk | Incline 9.0 | Speed 3.0→4.0",
         machine:"Treadmill (incline)",
-        tip:"Incline walking burns more calories than flat and activates glutes before lifting. Start at 3.0 and build to 4.0 speed." },
+        tip:"Incline walking burns more calories than flat and activates glutes before lifting. Start at 3.0 and build to 4.0 speed.", type:"treadmill" },
       { name:"Chest Press", sets:"3 sets", reps:"10–12 reps",
         machine:"Chest Press Machine (Seated)",
         tip:"Keep back flat, push straight out, don't lock elbows at the top." },
@@ -611,7 +611,7 @@ const days = [
         tip:"Extend fully overhead and squeeze. Keep core tight." },
       { name:"Cardio Finisher", sets:"10 min", reps:"Incline Walk | Incline 8.0–9.0 | Speed 5.5",
         machine:"Treadmill (incline)",
-        tip:"Do this after lifting when glycogen is already depleted — your body burns fat more efficiently. Keep pace steady and brisk." },
+        tip:"Do this after lifting when glycogen is already depleted — your body burns fat more efficiently. Keep pace steady and brisk.", type:"treadmill" },
     ],
     stretches:[
       { name:"Doorway Chest Stretch", sets:"2 × 30 sec", reps:"each side",
@@ -630,7 +630,7 @@ const days = [
     exercises:[
       { name:"Warm-up", sets:"5 min", reps:"Rowing Machine",
         machine:"Rowing Machine",
-        tip:"Engages back and arms together – perfect pre-workout warm-up." },
+        tip:"Engages back and arms together – perfect pre-workout warm-up.", type:"cardio" },
       { name:"Lat Pulldown", sets:"3 sets", reps:"10–12 reps",
         machine:"Lat Pulldown Machine",
         tip:"Pull bar to upper chest, lean back slightly, squeeze shoulder blades." },
@@ -664,7 +664,7 @@ const days = [
     exercises:[
       { name:"Warm-up", sets:"5 min", reps:"Stationary Bike",
         machine:"Stationary Bike",
-        tip:"Loosens up hip flexors and quads before heavy leg work." },
+        tip:"Loosens up hip flexors and quads before heavy leg work.", type:"cardio" },
       { name:"Leg Press", sets:"3 sets", reps:"10–12 reps",
         machine:"Leg Press Machine",
         tip:"Feet shoulder-width. Don't lock your knees at the top." },
@@ -682,7 +682,7 @@ const days = [
         tip:"Full range of motion – all the way up and all the way down." },
       { name:"Cardio Finisher", sets:"10 min", reps:"Incline Walk | Incline 8.0–9.0 | Speed 5.5",
         machine:"Treadmill (incline)",
-        tip:"Do this after lifting when glycogen is already depleted — your body burns fat more efficiently. Keep pace steady and brisk." },
+        tip:"Do this after lifting when glycogen is already depleted — your body burns fat more efficiently. Keep pace steady and brisk.", type:"treadmill" },
     ],
     stretches:[
       { name:"Standing Quad Stretch", sets:"2 × 30 sec", reps:"each leg",
@@ -704,7 +704,7 @@ const days = [
     exercises:[
       { name:"Warm-up", sets:"5 min", reps:"Elliptical",
         machine:"Elliptical Trainer",
-        tip:"Arm-movement elliptical warms up shoulders and gets heart rate up." },
+        tip:"Arm-movement elliptical warms up shoulders and gets heart rate up.", type:"cardio" },
       { name:"Shoulder Press", sets:"3 sets", reps:"10–12 reps",
         machine:"Shoulder Press Machine (Seated)",
         tip:"Press straight overhead. Don't arch your lower back." },
@@ -716,16 +716,16 @@ const days = [
         tip:"Controlled lift to eye level. Targets the front deltoids." },
       { name:"Plank Hold", sets:"3 sets", reps:"30–45 sec",
         machine:"Mat / Floor Area",
-        tip:"Keep hips level, body in a straight line. Breathe steadily. Build up to 45 sec as you get stronger." },
+        tip:"Keep hips level, body in a straight line. Breathe steadily. Build up to 45 sec as you get stronger.", type:"bodyweight" },
       { name:"Cable Crunch", sets:"3 sets", reps:"15 reps",
         machine:"Cable Machine with Rope Attachment",
         tip:"Kneel and pull rope to knees. Crunch hard and hold 1 second." },
       { name:"Russian Twist", sets:"3 sets", reps:"15 reps each side",
         machine:"Mat / Floor Area",
-        tip:"Sit at 45°, feet elevated if possible, rotate side to side with control. Hold a light plate or just clasp hands — it's harder than it looks." },
+        tip:"Sit at 45°, feet elevated if possible, rotate side to side with control. Hold a light plate or just clasp hands — it's harder than it looks.", type:"bodyweight" },
       { name:"Hanging Knee Raise", sets:"3 sets", reps:"12 reps",
         machine:"Captain's Chair / Pull-up Station",
-        tip:"Bring knees to chest slowly, lower with control. Don't swing — the slow lowering is where the work happens." },
+        tip:"Bring knees to chest slowly, lower with control. Don't swing — the slow lowering is where the work happens.", type:"bodyweight" },
     ],
     stretches:[
       { name:"Cross-Body Shoulder Stretch", sets:"2 × 30 sec", reps:"each side",
@@ -744,7 +744,7 @@ const days = [
     exercises:[
       { name:"Warm-up", sets:"7–8 min", reps:"Incline Walk | Incline 9.0 | Speed 3.0→4.0",
         machine:"Treadmill (incline)",
-        tip:"Incline walking activates glutes and calves before compounds. Start at 3.0 and build to 4.0 speed." },
+        tip:"Incline walking activates glutes and calves before compounds. Start at 3.0 and build to 4.0 speed.", type:"treadmill" },
       { name:"Smith Machine Squat", sets:"3 sets", reps:"10 reps",
         machine:"Smith Machine",
         tip:"Bar guided = safer for beginners. Feet shoulder-width, squat to parallel." },
@@ -762,7 +762,7 @@ const days = [
         tip:"Lighter weight, higher reps to finish off the legs for the week." },
       { name:"Cardio Finisher", sets:"10 min", reps:"Incline Walk | Incline 8.0–9.0 | Speed 5.5",
         machine:"Treadmill (incline)",
-        tip:"Do this after lifting when glycogen is already depleted — your body burns fat more efficiently. Keep pace steady and brisk." },
+        tip:"Do this after lifting when glycogen is already depleted — your body burns fat more efficiently. Keep pace steady and brisk.", type:"treadmill" },
     ],
     stretches:[
       { name:"Kneeling Hip Flexor Stretch", sets:"2 × 30 sec", reps:"each side",
@@ -781,25 +781,25 @@ const days = [
     exercises:[
       { name:"HIIT Run/Walk", sets:"20 min", reps:"30 sec sprint / 60 sec walk × 10",
         machine:"Treadmill",
-        tip:"Sprint at speed 7.0–7.5 (flat), recover at 3.5–4.0. HIIT burns significantly more belly fat than steady-pace cardio — keep the rest honest, don't slow down too much." },
+        tip:"Sprint at speed 7.0–7.5 (flat), recover at 3.5–4.0. HIIT burns significantly more belly fat than steady-pace cardio — keep the rest honest, don't slow down too much.", type:"treadmill" },
       { name:"Elliptical", sets:"10 min", reps:"Steady pace",
         machine:"Elliptical Trainer",
-        tip:"Low impact on joints. Great after a heavy lifting week." },
+        tip:"Low impact on joints. Great after a heavy lifting week.", type:"cardio" },
       { name:"Ab Crunch Machine", sets:"3 sets", reps:"15 reps",
         machine:"Abdominal Crunch Machine",
         tip:"Controlled crunches. Don't jerk the weight – use your abs." },
       { name:"Hanging Knee Raise", sets:"3 sets", reps:"12 reps",
         machine:"Captain's Chair / Pull-up Station",
-        tip:"Bring knees to chest slowly. Lower back safety is key here." },
+        tip:"Bring knees to chest slowly. Lower back safety is key here.", type:"bodyweight" },
       { name:"Bicycle Crunches", sets:"3 sets", reps:"20 reps each side",
         machine:"Mat / Floor Area",
-        tip:"Lie on back, hands behind head, alternate elbow to opposite knee. Slow and deliberate — don't rush, feel the obliques working on each rotation." },
+        tip:"Lie on back, hands behind head, alternate elbow to opposite knee. Slow and deliberate — don't rush, feel the obliques working on each rotation.", type:"bodyweight" },
       { name:"Dead Bug", sets:"2 sets", reps:"10 reps each side",
         machine:"Mat / Floor Area",
-        tip:"Lie on back, arms up, knees at 90°. Lower opposite arm and leg together without letting your lower back lift off the floor. Excellent deep core stability." },
+        tip:"Lie on back, arms up, knees at 90°. Lower opposite arm and leg together without letting your lower back lift off the floor. Excellent deep core stability.", type:"bodyweight" },
       { name:"Cool-down Row", sets:"5 min", reps:"Easy pace",
         machine:"Rowing Machine",
-        tip:"Perfect full-body cool down. Go very easy and focus on breathing." },
+        tip:"Perfect full-body cool down. Go very easy and focus on breathing.", type:"cardio" },
     ],
     stretches:[
       { name:"Cobra Stretch", sets:"2 × 30 sec", reps:"hold",
@@ -818,13 +818,13 @@ const days = [
     exercises:[
       { name:"Light Walk", sets:"20–30 min", reps:"Optional",
         machine:"Outdoors or Treadmill (slow)",
-        tip:"A gentle walk reduces soreness and aids muscle recovery." },
+        tip:"A gentle walk reduces soreness and aids muscle recovery.", type:"cardio" },
       { name:"Full Body Stretch", sets:"10–15 min", reps:"Hold 30 sec each",
         machine:"Yoga Mat / Stretching Area",
-        tip:"Stretch quads, hamstrings, chest, back, shoulders – every muscle group." },
+        tip:"Stretch quads, hamstrings, chest, back, shoulders – every muscle group.", type:"bodyweight" },
       { name:"Foam Rolling", sets:"10 min", reps:"As needed",
         machine:"Foam Roller (gym floor area)",
-        tip:"Roll quads, hamstrings, calves, upper back to reduce tightness." },
+        tip:"Roll quads, hamstrings, calves, upper back to reduce tightness.", type:"bodyweight" },
     ],
     stretches:[
       { name:"Supine Hamstring Stretch", sets:"2 × 30 sec", reps:"each leg",
@@ -852,6 +852,31 @@ const tips = [
   "📝 Write down your weights each session – tracking = progress",
   "🙋 Ask gym staff to show you any machine before your first use",
 ];
+
+const LOG_FIELDS = {
+  treadmill:  [{ key:'incline',  label:'Incline',      placeholder:'e.g. 9.0' },
+               { key:'speed',    label:'Speed',        placeholder:'e.g. 5.5' }],
+  cardio:     [{ key:'duration', label:'Duration',     placeholder:'e.g. 10 min' }],
+  bodyweight: [{ key:'reps',     label:'Reps / Time',  placeholder:'e.g. 3 × 30 sec' }],
+  strength:   [{ key:'weight',   label:'Weight',       placeholder:'e.g. 14 kg' },
+               { key:'reps',     label:'Reps',         placeholder:'e.g. 10, 12, 10' }],
+};
+
+function renderLogFields(ex, idx) {
+  const fields = LOG_FIELDS[ex.type] || LOG_FIELDS.strength;
+  const saved = gymLog[today]?.exercises?.[exKey(ex.name)] || {};
+  const fieldsHTML = fields.map(f => `
+    <div class="log-field">
+      <label>${f.label}</label>
+      <input type="text" inputmode="decimal" placeholder="${f.placeholder}"
+             value="${saved[f.key] || ''}"
+             oninput="saveExLog(${idx},'${f.key}',this.value)">
+    </div>`).join('');
+  return `<div class="ex-log" onclick="event.stopPropagation()">
+    <div class="log-title">📝 Today's Log</div>
+    <div class="log-fields">${fieldsHTML}</div>
+  </div>`;
+}
 
 // Map JS getDay() (0=Sun … 6=Sat) → days array index (0=Mon … 6=Sun)
 let activeDay = (new Date().getDay() + 6) % 7;
@@ -1109,19 +1134,7 @@ function render() {
                 <div class="tip-text">${ex.tip}</div>
               </div>
               ${renderMediaStrip(ex.name)}
-              <div class="ex-log" onclick="event.stopPropagation()">
-                <div class="log-title">📝 Today's Log</div>
-                <div class="log-fields">
-                  <div class="log-field">
-                    <label>Weight</label>
-                    <input type="text" inputmode="decimal" placeholder="e.g. 14 kg" value="${gymLog[today]?.exercises?.[day.day+'::'+ex.name]?.weight||''}" oninput="saveExLog(${i},'weight',this.value)">
-                  </div>
-                  <div class="log-field">
-                    <label>Reps / Time</label>
-                    <input type="text" placeholder="e.g. 10, 12, 10" value="${gymLog[today]?.exercises?.[day.day+'::'+ex.name]?.reps||''}" oninput="saveExLog(${i},'reps',this.value)">
-                  </div>
-                </div>
-              </div>
+              ${renderLogFields(ex, i)}
             </div>
           </div>`
         ).join('')}
