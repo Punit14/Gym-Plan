@@ -181,8 +181,6 @@
   .day-progress-count { font-size:11px; color:rgba(255,255,255,0.28); }
   .day-progress-count b { color:var(--accent); font-weight:700; font-size:13px; }
   .day-title { font-family:'Bebas Neue',sans-serif; font-size:32px; letter-spacing:1px; line-height:1; }
-  .day-focus { color:var(--muted); font-size:13px; margin-top:5px; }
-
   /* EXERCISE CARDS */
   .exercises { padding:12px 16px; display:flex; flex-direction:column; gap:10px; }
   .ex-card {
@@ -334,7 +332,6 @@
   .stretch-card.open { border-color:rgba(120,80,220,0.5); }
   .stretch-card .ex-num { background:rgba(120,80,220,0.18); color:#a78bfa; font-size:16px; }
   .stretch-card .copy-btn { color:#a78bfa; background:rgba(120,80,220,0.15); }
-  .stretch-card .ex-check:not(.done) { border-color:rgba(120,80,220,0.35); }
   .stretch-card .ex-divider { background:rgba(120,80,220,0.2); }
   .stretch-card .machine-label { background:rgba(120,80,220,0.12); }
   .stretch-card .machine-label-tag { color:#a78bfa; }
@@ -456,8 +453,6 @@
   @keyframes lbPop { from{opacity:0;transform:scale(0.93)} to{opacity:1;transform:scale(1)} }
   .lb-anim { animation: lbPop 0.18s ease; }
 
-  /* ── Progress card ── */
-
   /* ── Checkmark button ── */
   .ex-check {
     width:30px; height:30px; border-radius:9px; flex-shrink:0;
@@ -491,7 +486,6 @@
   .log-field input:focus { border-color:var(--accent); background:rgba(255,255,255,0.09); }
   .log-field input::placeholder { color:rgba(255,255,255,0.22); }
 
-  /* ── Export button ── */
   /* ── Kebab menu ── */
   .menu-btn {
     position:absolute; top:max(14px,calc(var(--safe-top) + 10px)); right:16px;
@@ -868,7 +862,7 @@ let activeDay = (new Date().getDay() + 6) % 7;
   const day = now.toLocaleDateString('en-GB', { weekday:'long' }).toUpperCase();
   const date = now.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' }).toUpperCase();
   document.getElementById('header-date').textContent = `${day} · ${date}`;
-  const _q = [
+  const quotes = [
     '"No excuses, only results."',
     '"Built not born."',
     '"Earn every rep."',
@@ -877,7 +871,7 @@ let activeDay = (new Date().getDay() + 6) % 7;
     '"One more rep. Always."',
     '"Strong mind. Strong body."',
   ];
-  document.getElementById('hd-quote').textContent = _q[now.getDay() % _q.length];
+  document.getElementById('hd-quote').textContent = quotes[now.getDay() % quotes.length];
 })();
 const cardState = { ex: null, str: null };
 let dayHeroEl, pbDone;
@@ -1100,7 +1094,7 @@ function render() {
                   <div class="ex-meta">${ex.sets} &nbsp;·&nbsp; ${ex.reps}</div>
                 </div>
               </div>
-              <button class="ex-check ${gymLog[today]?.exercises?.[day.day+'::'+ex.name]?.done ? 'done' : ''}" onclick="toggleDone(event,${i})">✓</button>
+              <button class="ex-check ${gymLog[today]?.exercises?.[day.day+'::'+ex.name]?.done ? 'done' : ''}" onclick="toggleDone(event,${i},'ex')">✓</button>
             </div>
             <div class="ex-body">
               <div class="ex-divider"></div>
@@ -1157,7 +1151,7 @@ function render() {
                   <div class="ex-meta">${str.sets} &nbsp;·&nbsp; ${str.reps}</div>
                 </div>
               </div>
-              <button class="ex-check ${gymLog[today]?.exercises?.[day.day+'::'+str.name]?.done ? 'done' : ''}" onclick="toggleDoneStretch(event,${i})">✓</button>
+              <button class="ex-check ${gymLog[today]?.exercises?.[day.day+'::'+str.name]?.done ? 'done' : ''}" onclick="toggleDone(event,${i},'str')">✓</button>
             </div>
             <div class="ex-body">
               <div class="ex-divider"></div>
@@ -1268,20 +1262,10 @@ function getExLog(exName) {
   return gymLog[today].exercises[key];
 }
 
-function toggleDone(e, idx) {
+function toggleDone(e, idx, type) {
   e.stopPropagation();
-  const exName = days[activeDay].exercises[idx].name;
-  const log = getExLog(exName);
-  log.done = !log.done;
-  saveLog();
-  e.currentTarget.classList.toggle('done', log.done);
-  updateProgress();
-}
-
-function toggleDoneStretch(e, idx) {
-  e.stopPropagation();
-  const strName = days[activeDay].stretches[idx].name;
-  const log = getExLog(strName);
+  const arr = type === 'str' ? days[activeDay].stretches : days[activeDay].exercises;
+  const log = getExLog(arr[idx].name);
   log.done = !log.done;
   saveLog();
   e.currentTarget.classList.toggle('done', log.done);
